@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:veloz/functions/serverClass.dart';
+import 'package:veloz/objects/serverClass.dart';
+import 'package:veloz/TestPage/testPage.dart';
 
 class HomePage extends StatefulWidget{
   @override
@@ -12,7 +13,7 @@ class _HomePageState extends State<HomePage>{
   List<Server> _servers = Server.getServers();
   List<DropdownMenuItem<Server>> _dropdownMenuItems;
   Server _selectedServer;
-
+    
 
   List<DropdownMenuItem<Server>> buildServers(List servers){
     List<DropdownMenuItem<Server>> itens = List();
@@ -47,9 +48,9 @@ class _HomePageState extends State<HomePage>{
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context){
     // TODO: implement build
-    print('Aqui');
+
     return Scaffold(
       body: Container(
         padding: EdgeInsets.all(20),
@@ -77,7 +78,7 @@ class _HomePageState extends State<HomePage>{
                         fontSize: 12,
                         color: Color.fromARGB(255, 66, 115, 227)
                     ),
-                    textAlign: TextAlign.left,
+                    textAlign: TextAlign.start,
                   ),
                   DropdownButton(
                     value: _selectedServer,
@@ -118,7 +119,13 @@ class _HomePageState extends State<HomePage>{
                             ),
                           ),
                           padding: EdgeInsets.only(top: 10, bottom: 10),
-                          onPressed: (){},
+                          onPressed: (){
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => TestPage(ipTest: _selectedServer.dns,)
+                              )
+                            );
+                          },
                         ),
                       )
                     ],
@@ -157,3 +164,5 @@ class _HomePageState extends State<HomePage>{
   }
 
 }
+
+

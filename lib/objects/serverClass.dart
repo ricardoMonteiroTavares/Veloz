@@ -7,8 +7,8 @@ class Server{
 
   static List<Server> getServers(){
     return <Server>[
-      Server(1,'Google DNS 1', '8.8.8.8'),
-      Server(1,'Google DNS 2', '8.8.4.4'),
+      Server(1,'Google DNS 1', '185.201.54.47'),
+      Server(2,'Google DNS 2', '8.8.4.4'),
     ];
   }
 }
