@@ -122,7 +122,7 @@ class _HomePageState extends State<HomePage>{
                           onPressed: (){
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) => TestPage(ipTest: _selectedServer.dns,)
+                                builder: (context) => TestPage(ipTest: _selectedServer.dns, hostTest: _selectedServer.host,)
                               )
                             );
                           },

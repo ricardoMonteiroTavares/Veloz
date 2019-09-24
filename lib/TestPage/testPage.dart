@@ -5,8 +5,15 @@ import 'package:veloz/objects/metricsClass.dart';
 
 class TestPage extends StatefulWidget{
   final String ipTest;
+  final String hostTest;
 
-  const TestPage({Key key, @required this.ipTest}) : super(key: key);
+  const TestPage(
+    {
+      Key key, 
+      @required this.ipTest,
+      @required this.hostTest,
+    }
+  ) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _TestPageState();
@@ -15,17 +22,38 @@ class TestPage extends StatefulWidget{
 class _TestPageState extends State<TestPage>{
   final Metrics _metric = Metrics();
   int pingAvg;
+  int downAvg;
+  int upAvg;
 
   void _pingTest(String ip) async{
-    int ping = await _metric.pingTest(ip);
+    int ping = await this._metric.pingTest(ip);
     setState(() {
       this.pingAvg = ping;
+    });
+  }
+
+  void _downloadTest(String host)async{
+    int down = await this._metric.downloadTest(host);
+    setState(() {
+      this.downAvg = down;
+    });
+  }
+  void _uploadTest(String ip)async{
+    int up = await this._metric.uploadTest(ip);
+    setState(() {
+      this.upAvg = up;
     });
   }
   @override
   Widget build(BuildContext context) {
     if(pingAvg == null){
-      _pingTest(widget.ipTest);
+      this._pingTest(widget.ipTest);
+    }
+    if(downAvg == null){
+      this._downloadTest(widget.hostTest);
+    }
+    if(upAvg == null){
+      this._uploadTest(widget.ipTest);
     }
     
     // TODO: implement build
@@ -35,7 +63,9 @@ class _TestPageState extends State<TestPage>{
         child: Column(
           children: <Widget>[
             
-            Text(this.pingAvg.toString())
+            Text(this.pingAvg.toString()),
+            Text(this.downAvg.toString()),
+            Text(this.upAvg.toString())
           ]
         ),
       ),
