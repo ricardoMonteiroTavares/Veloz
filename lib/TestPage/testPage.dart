@@ -38,8 +38,8 @@ class _TestPageState extends State<TestPage>{
       this.downAvg = down;
     });
   }
-  void _uploadTest(String ip)async{
-    int up = await this._metric.uploadTest(ip);
+  void _uploadTest(String host)async{
+    int up = await this._metric.uploadTest(host);
     setState(() {
       this.upAvg = up;
     });
@@ -53,7 +53,7 @@ class _TestPageState extends State<TestPage>{
       this._downloadTest(widget.hostTest);
     }
     if(upAvg == null){
-      this._uploadTest(widget.ipTest);
+      this._uploadTest(widget.hostTest);
     }
     
     // TODO: implement build
