@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:veloz/TestPage/testPageController.dart';
 
-import 'package:veloz/objects/metricsClass.dart';
 
 class TestPage extends StatefulWidget{
   final String ipTest;
@@ -20,56 +21,160 @@ class TestPage extends StatefulWidget{
 }
 
 class _TestPageState extends State<TestPage>{
-  final Metrics _metric = Metrics();
-  int pingAvg;
-  int downAvg;
-  int upAvg;
+  final TestPageController _controller = TestPageController();
 
-  void _pingTest(String ip) async{
-    int ping = await this._metric.pingTest(ip);
-    setState(() {
-      this.pingAvg = ping;
-    });
-  }
+  @override
+  void initState(){
+    if(this._controller.pingAvg == null){
+      this._controller.pingTest(widget.ipTest);
+    }
+    if(this._controller.downAvg == null){
+      this._controller.downloadTest(widget.hostTest);
+    }
+    if(this._controller.upAvg == null){
+      this._controller.uploadTest(widget.hostTest);
+    }
 
-  void _downloadTest(String host)async{
-    int down = await this._metric.downloadTest(host);
-    setState(() {
-      this.downAvg = down;
-    });
-  }
-  void _uploadTest(String host)async{
-    int up = await this._metric.uploadTest(host);
-    setState(() {
-      this.upAvg = up;
-    });
+    super.initState();
   }
   @override
   Widget build(BuildContext context) {
-    if(pingAvg == null){
-      this._pingTest(widget.ipTest);
-    }
-    if(downAvg == null){
-      this._downloadTest(widget.hostTest);
-    }
-    if(upAvg == null){
-      this._uploadTest(widget.hostTest);
-    }
     
     // TODO: implement build
-    return Scaffold(
-      body: Container(
-        padding: EdgeInsets.all(20),
-        child: Column(
-          children: <Widget>[
-            
-            Text(this.pingAvg.toString()),
-            Text(this.downAvg.toString()),
-            Text(this.upAvg.toString())
-          ]
-        ),
-      ),
-    );
+    return StreamBuilder(
+      stream: this._controller.output,
+      builder: (context, snapshot) {
+        return Scaffold(
+          body: Container(
+            padding: EdgeInsets.all(20),
+            child: Column(
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    SvgPicture.asset('assets/upload.svg', height: 25, width: 25,),
+                    SizedBox(
+                      width: 15,
+                    ),
+                    Text(
+                      'UPLOAD',
+                      style: TextStyle(
+                        fontFamily: 'Open Sans',
+                        fontSize: 16,
+                        color: Color.fromARGB(255, 95, 180, 4),
+                      ),
+                    )
+                  ],
+                ),
+                RichText(
+                  text: TextSpan(
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: (this._controller.upAvg == null)? '--' : this._controller.upAvg.toString(),
+                        style: TextStyle(
+                          fontFamily: 'Offside',
+                          fontSize: 50,
+                          color: Color.fromARGB(255, 95, 180, 4),
+                        )
+                      ),
+                      TextSpan(
+                        text: 'kbps',
+                        style: TextStyle(
+                          fontFamily: 'Open Sans Condensed',
+                          fontSize: 25,
+                          color: Color.fromARGB(255, 95, 180, 4),
+                        )
+                      ),
+                    ]
+                  ),
+                ),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    SvgPicture.asset('assets/download.svg', height: 25, width: 25,),
+                    SizedBox(
+                      width: 15,
+                    ),
+                    Text(
+                      'DOWNLOAD',
+                      style: TextStyle(
+                        fontFamily: 'Open Sans',
+                        fontSize: 16,
+                        color: Color.fromARGB(255, 250, 88, 88),
+                      ),
+                    )
+                  ],
+                ),
+                RichText(
+                  text: TextSpan(
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: (this._controller.downAvg == null)? '--' : this._controller.downAvg.toString(),
+                        style: TextStyle(
+                          fontFamily: 'Offside',
+                          fontSize: 50,
+                          color: Color.fromARGB(255, 250, 88, 88),
+                        )
+                      ),
+                      TextSpan(
+                        text: 'kbps',
+                        style: TextStyle(
+                          fontFamily: 'Open Sans Condensed',
+                          fontSize: 25,
+                          color: Color.fromARGB(255, 250, 88, 88),
+                        )
+                      ),
+                    ]
+                  ),
+                ),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    SvgPicture.asset('assets/ping.svg', height: 25, width: 25,),
+                    SizedBox(
+                      width: 15,
+                    ),
+                    Text(
+                      'PING',
+                      style: TextStyle(
+                        fontFamily: 'Open Sans',
+                        fontSize: 16,
+                        color: Color.fromARGB(255, 255, 165, 0),
+                      ),
+                    )
+                  ],
+                ),
+                RichText(
+                  text: TextSpan(
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: (this._controller.pingAvg == null)? '--' : this._controller.pingAvg.toString(),
+                        style: TextStyle(
+                          fontFamily: 'Offside',
+                          fontSize: 50,
+                          color: Color.fromARGB(255, 255, 165, 0),
+                        )
+                      ),
+                      TextSpan(
+                        text: 'ms',
+                        style: TextStyle(
+                          fontFamily: 'Open Sans Condensed',
+                          fontSize: 25,
+                          color: Color.fromARGB(255, 255, 165, 0),
+                        )
+                      ),
+                    ]
+                  ),
+                ),  
+              ]
+            ),
+          ),
+        );
+      }
+    ); 
+    
   }
 
 }
