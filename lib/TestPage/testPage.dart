@@ -39,6 +39,82 @@ class _TestPageState extends State<TestPage>{
 
     super.initState();
   }
+
+  Widget _titleTest(String icon, String type, Color color){
+    return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            SvgPicture.asset(icon, height: 25, width: 25,),
+            SizedBox(
+              width: 15,
+            ),
+            Text(
+              type,
+              style: TextStyle(
+                fontFamily: 'Open Sans',
+                fontSize: 16,
+                color: color,
+              ),
+            )
+          ],
+        );
+  }
+
+  Widget _resultTest(int value, Color color, bool type){
+    String metric;
+    if(type){
+      metric = 'kbps';
+    }else{
+      metric = 'ms';
+    }
+    return RichText(
+          text: TextSpan(
+            children: <TextSpan>[
+              TextSpan(
+                text: (value == null)? '--' : value.toString(),
+                style: TextStyle(
+                  fontFamily: 'Offside',
+                  fontSize: 50,
+                  color: color,
+                )
+              ),
+              TextSpan(
+                text: (value == null)? '' : metric,
+                style: TextStyle(
+                  fontFamily: 'Open Sans Condensed',
+                  fontSize: 25,
+                  color: color,
+                )
+              ),
+            ]
+          ),
+        );              
+  }
+
+  Widget _connectInfo(String name, String dns, Color color){
+    return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            name,
+            style: TextStyle(
+              fontFamily: 'Open Sans',
+              fontSize: 18,
+              color: color,
+            ),
+          ),
+          Text(
+            dns,
+            style: TextStyle(
+              fontFamily: 'Open Sans',
+              //fontSize: (RenderFlex().),
+              color: color,
+            ),
+          ),
+        ],
+      );
+  }
+
   @override
   Widget build(BuildContext context) {
     
@@ -74,31 +150,10 @@ class _TestPageState extends State<TestPage>{
                               ],
                             ),
                             SizedBox(
-                                  width: 3,
+                                  width: 5,
                             ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text(
-                                  widget.serverTest.name,
-                                  style: TextStyle(
-                                    fontFamily: 'Open Sans',
-                                    fontSize: 18,
-                                    color: Color.fromARGB(255, 66, 115, 227),
-
-                                  ),
-                                ),
-                                
-                                Text(
-                                  widget.serverTest.dns,
-                                  style: TextStyle(
-                                    fontFamily: 'Open Sans',
-                                    //fontSize: (RenderFlex().),
-                                    color: Color.fromARGB(255, 66, 115, 227),
-                                  ),
-                                ),
-                              ],
-                            )
+                            this._connectInfo(widget.serverTest.name, widget.serverTest.dns, Color.fromARGB(255, 66, 115, 227)),
+                            
                           ],
                         ),
                       ),
@@ -110,30 +165,9 @@ class _TestPageState extends State<TestPage>{
                           mainAxisAlignment: MainAxisAlignment.end,
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
-                            Column(
-                              //crossAxisAlignment: CrossAxisAlignment.end,
-                              children: <Widget>[
-                                Text(
-                                  "Seu IP",
-                                  style: TextStyle(
-                                    fontFamily: 'Open Sans',
-                                    fontSize: 18,
-                                    color: Color.fromARGB(255, 66, 115, 227),
-                                  ),
-                                ),
-                                
-                                Text(
-                                  "127.0.1",
-                                  style: TextStyle(
-                                    fontFamily: 'Open Sans',
-                                    //fontSize: 16,
-                                    color: Color.fromARGB(255, 66, 115, 227),
-                                  ),
-                                ),
-                              ],
-                            ),
+                            this._connectInfo("Seu IP", "127.0.1", Color.fromARGB(255, 66, 115, 227)),
                             SizedBox(
-                              width: 3,
+                              width: 5,
                             ),
                             Column(
                               children: <Widget>[
@@ -146,125 +180,14 @@ class _TestPageState extends State<TestPage>{
                     ),
                   ],
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    SvgPicture.asset('assets/upload.svg', height: 25, width: 25,),
-                    SizedBox(
-                      width: 15,
-                    ),
-                    Text(
-                      'UPLOAD',
-                      style: TextStyle(
-                        fontFamily: 'Open Sans',
-                        fontSize: 16,
-                        color: Color.fromARGB(255, 95, 180, 4),
-                      ),
-                    )
-                  ],
-                ),
-                RichText(
-                  text: TextSpan(
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: (this._controller.upAvg == null)? '--' : this._controller.upAvg.toString(),
-                        style: TextStyle(
-                          fontFamily: 'Offside',
-                          fontSize: 50,
-                          color: Color.fromARGB(255, 95, 180, 4),
-                        )
-                      ),
-                      TextSpan(
-                        text: (this._controller.upAvg == null)? '' : 'kbps',
-                        style: TextStyle(
-                          fontFamily: 'Open Sans Condensed',
-                          fontSize: 25,
-                          color: Color.fromARGB(255, 95, 180, 4),
-                        )
-                      ),
-                    ]
-                  ),
-                ),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    SvgPicture.asset('assets/download.svg', height: 25, width: 25,),
-                    SizedBox(
-                      width: 15,
-                    ),
-                    Text(
-                      'DOWNLOAD',
-                      style: TextStyle(
-                        fontFamily: 'Open Sans',
-                        fontSize: 16,
-                        color: Color.fromARGB(255, 250, 88, 88),
-                      ),
-                    )
-                  ],
-                ),
-                RichText(
-                  text: TextSpan(
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: (this._controller.downAvg == null)? '--' : this._controller.downAvg.toString(),
-                        style: TextStyle(
-                          fontFamily: 'Offside',
-                          fontSize: 50,
-                          color: Color.fromARGB(255, 250, 88, 88),
-                        )
-                      ),
-                      TextSpan(
-                        text: (this._controller.downAvg == null)? '' : 'kbps',
-                        style: TextStyle(
-                          fontFamily: 'Open Sans Condensed',
-                          fontSize: 25,
-                          color: Color.fromARGB(255, 250, 88, 88),
-                        )
-                      ),
-                    ]
-                  ),
-                ),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    SvgPicture.asset('assets/ping.svg', height: 25, width: 25,),
-                    SizedBox(
-                      width: 15,
-                    ),
-                    Text(
-                      'PING',
-                      style: TextStyle(
-                        fontFamily: 'Open Sans',
-                        fontSize: 16,
-                        color: Color.fromARGB(255, 255, 165, 0),
-                      ),
-                    )
-                  ],
-                ),
-                RichText(
-                  text: TextSpan(
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: (this._controller.pingAvg == null)? '--' : this._controller.pingAvg.toString(),
-                        style: TextStyle(
-                          fontFamily: 'Offside',
-                          fontSize: 50,
-                          color: Color.fromARGB(255, 255, 165, 0),
-                        )
-                      ),
-                      TextSpan(
-                        text: (this._controller.pingAvg == null)? '' : 'ms',
-                        style: TextStyle(
-                          fontFamily: 'Open Sans Condensed',
-                          fontSize: 25,
-                          color: Color.fromARGB(255, 255, 165, 0),
-                        )
-                      ),
-                    ]
-                  ),
-                ),
+                this._titleTest('assets/upload.svg', 'UPLOAD', Color.fromARGB(255, 95, 180, 4)),
+                this._resultTest(this._controller.upAvg, Color.fromARGB(255, 95, 180, 4), true),
+                
+                this._titleTest('assets/download.svg', 'DOWNLOAD', Color.fromARGB(255, 250, 88, 88)),
+                this._resultTest(this._controller.downAvg, Color.fromARGB(255, 250, 88, 88), true),
+                
+                this._titleTest('assets/ping.svg', 'PING', Color.fromARGB(255, 255, 165, 0)),
+                this._resultTest(this._controller.pingAvg, Color.fromARGB(255, 255, 165, 0), false),
                 
                 Row(
                   children: <Widget>[

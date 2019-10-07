@@ -37,4 +37,8 @@ class HomePageController{
     selectedServer = selected;
     this._streamController.add(this.selectedServer);
   }
+
+  void dispose(){
+    this._streamController.close();
+  }
 }
