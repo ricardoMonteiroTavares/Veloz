@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:veloz/HomePage/homePageController.dart';
-import 'package:veloz/objects/serverClass.dart';
 import 'package:veloz/TestPage/testPage.dart';
 
 class HomePage extends StatefulWidget{
@@ -97,7 +96,7 @@ class _HomePageState extends State<HomePage>{
                               onPressed: (){
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
-                                    builder: (context) => TestPage(ipTest: this._controller.selectedServer.dns, hostTest: this._controller.selectedServer.host,)
+                                    builder: (context) => TestPage(serverTest: this._controller.selectedServer, ipLocal: null,)
                                   )
                                 );
                               },

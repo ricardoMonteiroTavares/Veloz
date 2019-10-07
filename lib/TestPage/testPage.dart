@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:veloz/TestPage/testPageController.dart';
+import 'package:veloz/objects/serverClass.dart';
 
 
 class TestPage extends StatefulWidget{
-  final String ipTest;
-  final String hostTest;
+  final Server serverTest;
+  final String ipLocal;
 
   const TestPage(
     {
       Key key, 
-      @required this.ipTest,
-      @required this.hostTest,
+      @required this.serverTest,
+      @required this.ipLocal,
     }
   ) : super(key: key);
 
@@ -26,13 +28,13 @@ class _TestPageState extends State<TestPage>{
   @override
   void initState(){
     if(this._controller.pingAvg == null){
-      this._controller.pingTest(widget.ipTest);
+      this._controller.pingTest(widget.serverTest.dns);
     }
     if(this._controller.downAvg == null){
-      this._controller.downloadTest(widget.hostTest);
+      this._controller.downloadTest(widget.serverTest.host);
     }
     if(this._controller.upAvg == null){
-      this._controller.uploadTest(widget.hostTest);
+      this._controller.uploadTest(widget.serverTest.host);
     }
 
     super.initState();
@@ -49,6 +51,101 @@ class _TestPageState extends State<TestPage>{
             padding: EdgeInsets.all(20),
             child: Column(
               children: <Widget>[
+                Text(
+                  'Testando',
+                  style: TextStyle(
+                    fontFamily: 'Open Sans',
+                    fontSize: 30,
+                    color: Color.fromARGB(255, 66, 115, 227),
+
+                  ),
+                ),
+                Row(
+                  children: <Widget>[
+                    Container(
+                      child: Expanded(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Column(
+                              children: <Widget>[
+                                SvgPicture.asset(widget.serverTest.icon, height: 40),
+                              ],
+                            ),
+                            SizedBox(
+                                  width: 3,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  widget.serverTest.name,
+                                  style: TextStyle(
+                                    fontFamily: 'Open Sans',
+                                    fontSize: 18,
+                                    color: Color.fromARGB(255, 66, 115, 227),
+
+                                  ),
+                                ),
+                                
+                                Text(
+                                  widget.serverTest.dns,
+                                  style: TextStyle(
+                                    fontFamily: 'Open Sans',
+                                    //fontSize: (RenderFlex().),
+                                    color: Color.fromARGB(255, 66, 115, 227),
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                    
+                    Container(
+                      child: Expanded(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Column(
+                              //crossAxisAlignment: CrossAxisAlignment.end,
+                              children: <Widget>[
+                                Text(
+                                  "Seu IP",
+                                  style: TextStyle(
+                                    fontFamily: 'Open Sans',
+                                    fontSize: 18,
+                                    color: Color.fromARGB(255, 66, 115, 227),
+                                  ),
+                                ),
+                                
+                                Text(
+                                  "127.0.1",
+                                  style: TextStyle(
+                                    fontFamily: 'Open Sans',
+                                    //fontSize: 16,
+                                    color: Color.fromARGB(255, 66, 115, 227),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              width: 3,
+                            ),
+                            Column(
+                              children: <Widget>[
+                                SvgPicture.asset("assets/smartphone.svg", height: 40),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -78,7 +175,7 @@ class _TestPageState extends State<TestPage>{
                         )
                       ),
                       TextSpan(
-                        text: 'kbps',
+                        text: (this._controller.upAvg == null)? '' : 'kbps',
                         style: TextStyle(
                           fontFamily: 'Open Sans Condensed',
                           fontSize: 25,
@@ -118,7 +215,7 @@ class _TestPageState extends State<TestPage>{
                         )
                       ),
                       TextSpan(
-                        text: 'kbps',
+                        text: (this._controller.downAvg == null)? '' : 'kbps',
                         style: TextStyle(
                           fontFamily: 'Open Sans Condensed',
                           fontSize: 25,
@@ -158,7 +255,7 @@ class _TestPageState extends State<TestPage>{
                         )
                       ),
                       TextSpan(
-                        text: 'ms',
+                        text: (this._controller.pingAvg == null)? '' : 'ms',
                         style: TextStyle(
                           fontFamily: 'Open Sans Condensed',
                           fontSize: 25,
@@ -167,6 +264,28 @@ class _TestPageState extends State<TestPage>{
                       ),
                     ]
                   ),
+                ),
+                
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: FlatButton(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30)
+                        ),
+                        color: Color.fromARGB(255, 66, 115, 227),
+                        child: Text('Finalizar',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'Open Sans',
+                              fontSize: 20
+                          ),
+                        ),
+                        padding: EdgeInsets.only(top: 10, bottom: 10),
+                        onPressed: (){},
+                      ),
+                    )
+                  ],
                 ),  
               ]
             ),
