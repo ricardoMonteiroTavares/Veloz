@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:veloz/HistoryPage/historyPage.dart';
 import 'package:veloz/HomePage/homePageController.dart';
 import 'package:veloz/TestPage/testPage.dart';
 
@@ -123,7 +124,13 @@ class _HomePageState extends State<HomePage>{
                                 ),
                               ),
                               padding: EdgeInsets.only(top: 10, bottom: 10),
-                              onPressed: (){},
+                              onPressed: (){
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => HistoryPage()
+                                  )
+                                );
+                              },
                             ),
                           )
                         ],
