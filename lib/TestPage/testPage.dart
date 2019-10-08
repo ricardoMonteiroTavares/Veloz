@@ -27,13 +27,13 @@ class _TestPageState extends State<TestPage>{
 
   @override
   void initState(){
-    if(this._controller.pingAvg == null){
+    if(this._controller.result.pingAvg == null){
       this._controller.pingTest(widget.serverTest.dns);
     }
-    if(this._controller.downAvg == null){
+    if(this._controller.result.downAvg == null){
       this._controller.downloadTest(widget.serverTest.host);
     }
-    if(this._controller.upAvg == null){
+    if(this._controller.result.upAvg == null){
       this._controller.uploadTest(widget.serverTest.host);
     }
 
@@ -117,7 +117,6 @@ class _TestPageState extends State<TestPage>{
 
   @override
   Widget build(BuildContext context) {
-    
     // TODO: implement build
     return StreamBuilder(
       stream: this._controller.output,
@@ -181,13 +180,13 @@ class _TestPageState extends State<TestPage>{
                   ],
                 ),
                 this._titleTest('assets/upload.svg', 'UPLOAD', Color.fromARGB(255, 95, 180, 4)),
-                this._resultTest(this._controller.upAvg, Color.fromARGB(255, 95, 180, 4), true),
+                this._resultTest(this._controller.result.upAvg, Color.fromARGB(255, 95, 180, 4), true),
                 
                 this._titleTest('assets/download.svg', 'DOWNLOAD', Color.fromARGB(255, 250, 88, 88)),
-                this._resultTest(this._controller.downAvg, Color.fromARGB(255, 250, 88, 88), true),
+                this._resultTest(this._controller.result.downAvg, Color.fromARGB(255, 250, 88, 88), true),
                 
                 this._titleTest('assets/ping.svg', 'PING', Color.fromARGB(255, 255, 165, 0)),
-                this._resultTest(this._controller.pingAvg, Color.fromARGB(255, 255, 165, 0), false),
+                this._resultTest(this._controller.result.pingAvg, Color.fromARGB(255, 255, 165, 0), false),
                 
                 Row(
                   children: <Widget>[
@@ -205,7 +204,12 @@ class _TestPageState extends State<TestPage>{
                           ),
                         ),
                         padding: EdgeInsets.only(top: 10, bottom: 10),
-                        onPressed: (){},
+                        onPressed: (){
+                          this._controller.saveResult(widget.serverTest.id);
+                          if(this._controller.sucess){
+                            Navigator.of(context).pop();
+                          }
+                        },
                       ),
                     )
                   ],
@@ -219,4 +223,9 @@ class _TestPageState extends State<TestPage>{
     
   }
 
+  @override
+  void dispose(){
+    this._controller.dispose();
+    super.dispose();
+  }
 }

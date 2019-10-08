@@ -1,31 +1,53 @@
 import 'dart:async';
 
+import 'package:intl/intl.dart';
+import 'package:veloz/objects/database.dart';
 import 'package:veloz/objects/metricsClass.dart';
+import 'package:veloz/objects/resultClass.dart';
 
 class TestPageController{
   final Metrics _metric = Metrics();
   final StreamController _streamController = new StreamController();
-  int pingAvg;
-  int downAvg;
-  int upAvg;
+  ResultTest result = new ResultTest(
+    date: DateFormat('yyyy-MM-dd-kk-mm').format(DateTime.now()),
+    downAvg: null,
+    pingAvg: null,
+    upAvg: null,
+    );
+  bool sucess = false;
+  
 
   Sink get input => _streamController.sink;
   Stream get output => _streamController.stream;
 
   void pingTest(String ip) async{
     int ping = await this._metric.pingTest(ip);
-    this.pingAvg = ping;
-    _streamController.add(this.pingAvg);
+    this.result.pingAvg = ping;
+    _streamController.add(this.result.pingAvg);
   }
 
   void downloadTest(String host)async{
     int down = await this._metric.downloadTest(host);
-    this.downAvg = down;
-    _streamController.add(this.downAvg);
+    this.result.downAvg = down;
+    _streamController.add(this.result.downAvg);
   }
   void uploadTest(String host)async{
     int up = await this._metric.uploadTest(host);
-    this.upAvg = up;
-    _streamController.add(this.upAvg);
+    this.result.upAvg = up;
+    _streamController.add(this.result.upAvg);
+  }
+
+  void saveResult(int idServer) async{
+    if((this.result.upAvg != null) && (this.result.downAvg != null) && (this.result.pingAvg != null)){
+      this.result.idServer = idServer;
+      await DBProvider.db.insertResult(this.result);
+      this.sucess = true; 
+    }else{
+      this.sucess = false;
+    }
+  }
+
+  void dispose(){
+    this._streamController.close();
   }    
 }
