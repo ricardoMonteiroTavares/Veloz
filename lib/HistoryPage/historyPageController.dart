@@ -9,8 +9,11 @@ class HistoryPageController{
 
   List<Server> servers = Server.getServers();
   List<DropdownMenuItem<Server>> dropdownMenuItems;
-  List<ResultTest> data = [];
   Server selectedServer;
+  List<List<double>> chartData;
+ // List<double> ping;
+ // List<double> down;
+//  List<double> up;
 
   final StreamController _streamController = new StreamController();
   Sink get input => _streamController.sink;
@@ -45,8 +48,20 @@ void buildServers(){
   }
 
   void onChangeData()async{
-    this.data = await DBProvider.db.getClient(this.selectedServer.id);
-    this._streamController.add(this.data);
-    print(this.data);
+    List<ResultTest> data = await DBProvider.db.getClient(this.selectedServer.id);
+    //this._streamController.add(this.data);
+    this.chartData = [[],[],[]];
+    for(ResultTest i in data){
+      this.chartData[0].add(i.pingAvg.toDouble());
+      this.chartData[1].add(i.downAvg.toDouble());
+      this.chartData[2].add(i.upAvg.toDouble());
+  //    this.ping.add(i.pingAvg.toDouble());
+    //  this.down.add(i.downAvg.toDouble());
+     // this.up.add(i.upAvg.toDouble());
+    }
+    this._streamController.add(this.chartData);
+ //   this._streamController.add(this.down);
+ //   this._streamController.add(this.up);
+    //print(this.data);
   }
 }
