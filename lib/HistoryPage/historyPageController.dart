@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:veloz/objects/database.dart';
 import 'package:veloz/objects/resultClass.dart';
 import 'package:veloz/objects/serverClass.dart';
+import 'dart:math';
 
 class HistoryPageController{
 
@@ -55,13 +56,22 @@ void buildServers(){
       this.chartData[0].add(i.pingAvg.toDouble());
       this.chartData[1].add(i.downAvg.toDouble());
       this.chartData[2].add(i.upAvg.toDouble());
-  //    this.ping.add(i.pingAvg.toDouble());
-    //  this.down.add(i.downAvg.toDouble());
-     // this.up.add(i.upAvg.toDouble());
     }
     this._streamController.add(this.chartData);
- //   this._streamController.add(this.down);
- //   this._streamController.add(this.up);
-    //print(this.data);
+  }
+
+  int avg(List<double> data){
+    return ((data.reduce((curr, next) => curr + next))/data.length).round();
+  }
+
+  int standardDeviation(List<double> data){
+    int avg = this.avg(data);
+    int total = 0;
+    for (double i in data){
+      total += pow((i-avg),2).toInt();
+    }
+
+    return sqrt(total/data.length).round();
+
   }
 }
