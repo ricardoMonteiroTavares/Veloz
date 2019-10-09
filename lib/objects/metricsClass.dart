@@ -81,7 +81,7 @@ class Metrics {
       
     }
 
-    double velMed = (((64000*8)/sucess)/(time/sucess));      // Faz a conta de velocidade média em kbps
+    double velMed = ((64000*8)/(time/sucess));      // Faz a conta de velocidade média em kbps
 
     return velMed.round();                                    // Retorna a velocidade média arredondada
   }
