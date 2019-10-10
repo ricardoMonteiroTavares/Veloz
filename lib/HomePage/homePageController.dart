@@ -25,6 +25,7 @@ class HomePageController{
               fontSize: 20, 
               color: Color.fromARGB(255, 66, 115, 227) 
             ),
+            textAlign: TextAlign.center,
           )
         )
       );

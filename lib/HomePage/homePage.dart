@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+//import 'package:flutter/services.dart';
 import 'package:veloz/HistoryPage/historyPage.dart';
 import 'package:veloz/HomePage/homePageController.dart';
 import 'package:veloz/TestPage/testPage.dart';
+//import 'package:connectivity/connectivity.dart';
+//import 'package:get_ip/get_ip.dart';
 
 class HomePage extends StatefulWidget{
   @override
@@ -27,6 +30,7 @@ class _HomePageState extends State<HomePage>{
       stream: this._controller.output,
       builder: (context, snapshot){
         return Scaffold(
+          backgroundColor: Colors.white,
           body: Container(
             padding: EdgeInsets.all(20),
             child: Column(
@@ -45,9 +49,10 @@ class _HomePageState extends State<HomePage>{
                 Container(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        'Escolha o servidor para teste:',
+                        (' '*5)+'Escolha o servidor para teste:',
                         style: TextStyle(
                             fontFamily: 'Open Sans',
                             fontSize: 12,
@@ -64,7 +69,6 @@ class _HomePageState extends State<HomePage>{
                         iconEnabledColor: Color.fromARGB(255, 66, 115, 227),
                         iconSize: 30,
                         underline: Container(
-                          padding: EdgeInsets.only(top: 5),
                           height: 1,
                           color: Color.fromARGB(255, 66, 115, 227),
                         ),
@@ -94,12 +98,30 @@ class _HomePageState extends State<HomePage>{
                                 ),
                               ),
                               padding: EdgeInsets.only(top: 10, bottom: 10),
-                              onPressed: (){
+                              onPressed: () async{
                                 Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => TestPage(serverTest: this._controller.selectedServer, ipLocal: null,)
-                                  )
+                                    MaterialPageRoute(
+                                        builder: (context) => TestPage(serverTest: this._controller.selectedServer, ipLocal: 'null')
+                                    )
                                 );
+                                /*
+                                var connectivity = await Connectivity().checkConnectivity();
+
+                                if((connectivity == ConnectivityResult.wifi) || (connectivity == ConnectivityResult.mobile)){
+                                  String ip = "NE";
+                                  try {
+                                    ip = await GetIp.ipAddress;
+                                  } on PlatformException {
+                                    ip = 'Falha';
+                                  }
+                                  Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                          builder: (context) => TestPage(serverTest: this._controller.selectedServer, ipLocal: ip)
+                                      )
+                                  );
+                                }else{
+                                }*/
+
                               },
                             ),
                           )

@@ -12,15 +12,13 @@ class HistoryPageController{
   List<DropdownMenuItem<Server>> dropdownMenuItems;
   Server selectedServer;
   List<List<double>> chartData;
- // List<double> ping;
- // List<double> down;
-//  List<double> up;
+
 
   final StreamController _streamController = new StreamController();
   Sink get input => _streamController.sink;
   Stream get output => _streamController.stream;
 
-void buildServers(){
+  void buildServers(){
     List<DropdownMenuItem<Server>> itens = List();
     for (Server s in this.servers){
       itens.add(
@@ -33,6 +31,7 @@ void buildServers(){
               fontSize: 20, 
               color: Color.fromARGB(255, 66, 115, 227) 
             ),
+            textAlign: TextAlign.center,
           )
         )
       );
@@ -50,12 +49,12 @@ void buildServers(){
 
   void onChangeData()async{
     List<ResultTest> data = await DBProvider.db.getClient(this.selectedServer.id);
-    //this._streamController.add(this.data);
+
     this.chartData = [[],[],[]];
     for(ResultTest i in data){
-      this.chartData[0].add(i.pingAvg.toDouble());
-      this.chartData[1].add(i.downAvg.toDouble());
-      this.chartData[2].add(i.upAvg.toDouble());
+      this.chartData[0].insert(0,i.pingAvg.toDouble());
+      this.chartData[1].insert(0,i.downAvg.toDouble());
+      this.chartData[2].insert(0,i.upAvg.toDouble());
     }
     this._streamController.add(this.chartData);
   }
@@ -64,7 +63,7 @@ void buildServers(){
     return ((data.reduce((curr, next) => curr + next))/data.length).round();
   }
 
-  int standardDeviation(List<double> data){
+  int _standardDeviation(List<double> data){
     int avg = this.avg(data);
     int total = 0;
     for (double i in data){
@@ -73,5 +72,20 @@ void buildServers(){
 
     return sqrt(total/data.length).round();
 
+  }
+
+  int minimal(List<double> data){
+    int value = (this.avg(data) - this._standardDeviation(data));
+    if (value < 0){
+      return 0;
+    }
+    return value;
+  }
+
+  int maximal(List<double> data)
+    => (this.avg(data) + this._standardDeviation(data));
+
+  void dispose(){
+    this._streamController.close();
   }
 }

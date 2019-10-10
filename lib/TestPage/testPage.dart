@@ -125,6 +125,7 @@ class _TestPageState extends State<TestPage>{
           body: Container(
             padding: EdgeInsets.all(20),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 Text(
                   'Testando',
@@ -164,7 +165,7 @@ class _TestPageState extends State<TestPage>{
                           mainAxisAlignment: MainAxisAlignment.end,
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
-                            this._connectInfo("Seu IP", "127.0.1", Color.fromARGB(255, 66, 115, 227)),
+                            this._connectInfo("Seu IP", widget.ipLocal, Color.fromARGB(255, 66, 115, 227)),
                             SizedBox(
                               width: 5,
                             ),
@@ -179,41 +180,63 @@ class _TestPageState extends State<TestPage>{
                     ),
                   ],
                 ),
-                this._titleTest('assets/upload.svg', 'UPLOAD', Color.fromARGB(255, 95, 180, 4)),
-                this._resultTest(this._controller.result.upAvg, Color.fromARGB(255, 95, 180, 4), true),
-                
-                this._titleTest('assets/download.svg', 'DOWNLOAD', Color.fromARGB(255, 250, 88, 88)),
-                this._resultTest(this._controller.result.downAvg, Color.fromARGB(255, 250, 88, 88), true),
-                
-                this._titleTest('assets/ping.svg', 'PING', Color.fromARGB(255, 255, 165, 0)),
-                this._resultTest(this._controller.result.pingAvg, Color.fromARGB(255, 255, 165, 0), false),
-                
-                Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: FlatButton(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30)
-                        ),
-                        color: Color.fromARGB(255, 66, 115, 227),
-                        child: Text('Finalizar',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'Open Sans',
-                              fontSize: 20
+                Container(
+                  child: Column(
+                    children: <Widget>[
+                      this._titleTest('assets/upload.svg', 'UPLOAD', Color.fromARGB(255, 95, 180, 4)),
+                      this._resultTest(this._controller.result.upAvg, Color.fromARGB(255, 95, 180, 4), true),
+                    ],
+                  ),
+                ),
+
+                Container(
+                  child: Column(
+                    children: <Widget>[
+                      this._titleTest('assets/download.svg', 'DOWNLOAD', Color.fromARGB(255, 250, 88, 88)),
+                      this._resultTest(this._controller.result.downAvg, Color.fromARGB(255, 250, 88, 88), true),
+                    ],
+                  ),
+                ),
+
+                Container(
+                  child: Column(
+                    children: <Widget>[
+                      this._titleTest('assets/ping.svg', 'PING', Color.fromARGB(255, 255, 165, 0)),
+                      this._resultTest(this._controller.result.pingAvg, Color.fromARGB(255, 255, 165, 0), false),
+                    ],
+                  ),
+                ),
+
+                Visibility(
+                  visible: ((this._controller.result.upAvg != null) && (this._controller.result.downAvg != null) && (this._controller.result.pingAvg != null)),
+                  child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: FlatButton(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30)
+                            ),
+                            color: Color.fromARGB(255, 66, 115, 227),
+                            child: Text('Finalizar',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Open Sans',
+                                  fontSize: 20
+                              ),
+                            ),
+                            padding: EdgeInsets.only(top: 10, bottom: 10),
+                            onPressed: () async{
+                              bool flag = await this._controller.saveResult(widget.serverTest.id);
+                              if(flag){
+                                Navigator.of(context).pop();
+                              }
+                            },
                           ),
-                        ),
-                        padding: EdgeInsets.only(top: 10, bottom: 10),
-                        onPressed: (){
-                          this._controller.saveResult(widget.serverTest.id);
-                          if(this._controller.sucess){
-                            Navigator.of(context).pop();
-                          }
-                        },
-                      ),
-                    )
-                  ],
-                ),  
+                        )
+                      ],
+                    ),
+                ),
+
               ]
             ),
           ),
@@ -225,7 +248,7 @@ class _TestPageState extends State<TestPage>{
 
   @override
   void dispose(){
-    this._controller.dispose();
     super.dispose();
+    this._controller.dispose();
   }
 }

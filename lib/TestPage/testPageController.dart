@@ -37,13 +37,13 @@ class TestPageController{
     _streamController.add(this.result.upAvg);
   }
 
-  void saveResult(int idServer) async{
+  Future<bool> saveResult(int idServer) async{
     if((this.result.upAvg != null) && (this.result.downAvg != null) && (this.result.pingAvg != null)){
       this.result.idServer = idServer;
       await DBProvider.db.insertResult(this.result);
-      this.sucess = true; 
+      return true;
     }else{
-      this.sucess = false;
+      return false;
     }
   }
 

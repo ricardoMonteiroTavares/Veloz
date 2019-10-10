@@ -15,6 +15,7 @@ class HistoryPage extends StatefulWidget{
 class _HistoryPageState extends State<HistoryPage>{
   HistoryPageController _controller = new HistoryPageController();
 
+  @override
   void initState(){
     this._controller.buildServers();
     this._controller.onChangeItem(this._controller.dropdownMenuItems[0].value);
@@ -80,223 +81,265 @@ class _HistoryPageState extends State<HistoryPage>{
     return StreamBuilder(
       stream: this._controller.output,
       builder: (context, snapshot){
+        if(this._controller.chartData == null){ return Text('Sem dados');}
         return Scaffold(
+          appBar: AppBar(
+            title: Text(
+              'Histórico',
+              style: TextStyle(
+                fontFamily: 'Open Sans',
+                fontSize: 30,
+                color: Color.fromARGB(255, 66, 115, 227),
+              ),
+            ),
+            centerTitle: true,
+            backgroundColor: Colors.white,
+            elevation: 0,
+          ),
+          backgroundColor: Colors.white,
           body: Container(
             padding: EdgeInsets.all(20),
             child: SingleChildScrollView(
               child: Column(
                   children: <Widget>[
-                    Text(
-                      'Histórico',
-                      style: TextStyle(
-                        fontFamily: 'Open Sans',
-                        fontSize: 30,
-                        color: Color.fromARGB(255, 66, 115, 227),
 
-                      ),
+                  Container(
+                    child: DropdownButton(
+                      value: this._controller.selectedServer,
+                      items: this._controller.dropdownMenuItems,
+                      onChanged: this._controller.onChangeItem,
+                      isExpanded: true,
+                      icon: Icon(Icons.keyboard_arrow_down),
+                      iconEnabledColor: Color.fromARGB(255, 66, 115, 227),
+                      iconSize: 30,
                     ),
-                    Container(
-                      child: DropdownButton(
-                        value: this._controller.selectedServer,
-                        items: this._controller.dropdownMenuItems,
-                        onChanged: this._controller.onChangeItem,
-                        isExpanded: true,
-                        icon: Icon(Icons.keyboard_arrow_down),
-                        iconEnabledColor: Color.fromARGB(255, 66, 115, 227),
-                        iconSize: 30,
-                        underline: Container(
-                          padding: EdgeInsets.only(top: 5),
-                          height: 1,
-                          color: Color.fromARGB(255, 66, 115, 227),
-                        ),
-                      ),
-                    ),
-                    //this._emptyChart(this._controller.chartData)
+                  ),
 
-                    (this._controller.chartData[0].isNotEmpty)?
-                    Column(
-                      children: <Widget>[
-                        this._titleTest('assets/ping.svg', 'PING', Color.fromARGB(255, 255, 165, 0)),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Container(
-                          height: 100,
-                          child:(this._controller.chartData[0].isNotEmpty)? Sparkline(
-                            data: this._controller.chartData[0],
-                            lineColor: Color.fromARGB(255, 255, 165, 0),
-                            pointsMode: PointsMode.all,
-                            pointColor: Color.fromARGB(255, 255, 165, 0),
-                            fillMode: FillMode.below,
-                            fillColor: Color.fromARGB(120, 255, 165, 0),
-                          ) : Text("Não existe dados"),
-                        ),
-                        SizedBox(
-                          height: 2,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: <Widget>[
+                  Container(
+                    child: (this._controller.chartData[0].isNotEmpty &&
+                            this._controller.chartData[1].isNotEmpty &&
+                            this._controller.chartData[2].isNotEmpty)?
                             Column(
                               children: <Widget>[
-                                Text("MÍN",
-                                    style: TextStyle(
-                                      fontFamily: 'Open Sans',
-                                      fontSize: 15,
-                                      color: Color.fromARGB(255, 255, 165, 0),
-                                    )
+                                this._titleTest('assets/ping.svg', 'PING', Color.fromARGB(255, 255, 165, 0)),
+                                SizedBox(
+                                  height: 5,
                                 ),
-                                this._resultTest((this._controller.avg(this._controller.chartData[0]) - this._controller.standardDeviation(this._controller.chartData[0])), Color.fromARGB(255, 255, 165, 0), false),
-                              ],
-                            ),
-                            Column(
-                              children: <Widget>[
-                                Text("MÉD",
-                                    style: TextStyle(
-                                      fontFamily: 'Open Sans',
-                                      fontSize: 15,
-                                      color: Color.fromARGB(255, 255, 165, 0),
-                                    )
+                                Container(
+                                  height: 100,
+                                  child:Sparkline(
+                                    data: this._controller.chartData[0],
+                                    lineColor: Color.fromARGB(255, 255, 165, 0),
+                                    pointsMode: PointsMode.all,
+                                    pointColor: Color.fromARGB(255, 255, 165, 0),
+                                    fillMode: FillMode.below,
+                                    fillColor: Color.fromARGB(120, 255, 165, 0),
+                                  )
                                 ),
-                                this._resultTest(this._controller.avg(this._controller.chartData[0]), Color.fromARGB(255, 255, 165, 0), false),
-                              ],
-                            ),
-                            Column(
-                              children: <Widget>[
-                                Text("MÁX",
-                                    style: TextStyle(
-                                      fontFamily: 'Open Sans',
-                                      fontSize: 15,
-                                      color: Color.fromARGB(255, 255, 165, 0),
-                                    )
+                                SizedBox(
+                                  height: 2,
                                 ),
-                                this._resultTest((this._controller.avg(this._controller.chartData[0]) + this._controller.standardDeviation(this._controller.chartData[0])), Color.fromARGB(255, 255, 165, 0), false),
-                              ],
-                            ),
-                          ]
-                        ),
+                                Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                    children: <Widget>[
+                                      Column(
+                                        children: <Widget>[
+                                          Text("MÍN",
+                                              style: TextStyle(
+                                                fontFamily: 'Open Sans',
+                                                fontSize: 15,
+                                                color: Color.fromARGB(255, 255, 165, 0),
+                                              )
+                                          ),
+                                          this._resultTest(
+                                              this._controller.minimal(this._controller.chartData[0]),
+                                              Color.fromARGB(255, 255, 165, 0),
+                                              false
+                                          ),
+                                        ],
+                                      ),
+                                      Column(
+                                        children: <Widget>[
+                                          Text("MÉD",
+                                              style: TextStyle(
+                                                fontFamily: 'Open Sans',
+                                                fontSize: 15,
+                                                color: Color.fromARGB(255, 255, 165, 0),
+                                              )
+                                          ),
+                                          this._resultTest(
+                                              this._controller.avg(this._controller.chartData[0]),
+                                              Color.fromARGB(255, 255, 165, 0),
+                                              false
+                                          ),
+                                        ],
+                                      ),
+                                      Column(
+                                        children: <Widget>[
+                                          Text("MÁX",
+                                              style: TextStyle(
+                                                fontFamily: 'Open Sans',
+                                                fontSize: 15,
+                                                color: Color.fromARGB(255, 255, 165, 0),
+                                              )
+                                          ),
+                                          this._resultTest(
+                                              this._controller.maximal(this._controller.chartData[0]),
+                                              Color.fromARGB(255, 255, 165, 0),
+                                              false
+                                          ),
+                                        ],
+                                      ),
+                                    ]
+                                ),
 
-                        this._titleTest('assets/download.svg', 'DOWNLOAD', Color.fromARGB(255, 250, 88, 88)),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Container(
-                          height: 100,
-                          child:(this._controller.chartData[1].isNotEmpty)? Sparkline(
-                            data: this._controller.chartData[1],
-                            lineColor: Color.fromARGB(255, 250, 88, 88),
-                            pointsMode: PointsMode.all,
-                            pointColor: Color.fromARGB(255, 250, 88, 88),
-                            fillMode: FillMode.below,
-                            fillColor: Color.fromARGB(120, 250, 88, 88),
-                          ) : Text("Não existe dados"),
-                        ),
-                        SizedBox(
-                          height: 2,
-                        ),
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: <Widget>[
-                              Column(
-                                children: <Widget>[
-                                  Text("MÍN",
-                                      style: TextStyle(
-                                        fontFamily: 'Open Sans',
-                                        fontSize: 15,
-                                        color: Color.fromARGB(255, 250, 88, 88),
-                                      )
-                                  ),
-                                  this._resultTest((this._controller.avg(this._controller.chartData[1]) - this._controller.standardDeviation(this._controller.chartData[1])), Color.fromARGB(255, 250, 88, 88), true),
-                                ],
-                              ),
-                              Column(
-                                children: <Widget>[
-                                  Text("MÉD",
-                                      style: TextStyle(
-                                        fontFamily: 'Open Sans',
-                                        fontSize: 15,
-                                        color: Color.fromARGB(255, 250, 88, 88),
-                                      )
-                                  ),
-                                  this._resultTest(this._controller.avg(this._controller.chartData[1]), Color.fromARGB(255, 250, 88, 88), true),
-                                ],
-                              ),
-                              Column(
-                                children: <Widget>[
-                                  Text("MÁX",
-                                      style: TextStyle(
-                                        fontFamily: 'Open Sans',
-                                        fontSize: 15,
-                                        color: Color.fromARGB(255, 250, 88, 88),
-                                      )
-                                  ),
-                                  this._resultTest((this._controller.avg(this._controller.chartData[1]) + this._controller.standardDeviation(this._controller.chartData[1])), Color.fromARGB(255, 250, 88, 88), true),
-                                ],
-                              ),
-                            ]
-                        ),
-                        this._titleTest('assets/upload.svg', 'UPLOAD', Color.fromARGB(255, 95, 180, 4)),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Container(
-                          height: 100,
-                          child:(this._controller.chartData[2].isNotEmpty)? Sparkline(
-                            data: this._controller.chartData[2],
-                            lineColor: Color.fromARGB(255, 95, 180, 4),
-                            pointsMode: PointsMode.all,
-                            pointColor: Color.fromARGB(255, 95, 180, 4),
-                            fillMode: FillMode.below,
-                            fillColor: Color.fromARGB(120, 95, 180, 4),
-                          ) : Text("Não existe dados"),
-                        ),
-                        SizedBox(
-                          height: 2,
-                        ),
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: <Widget>[
-                              Column(
-                                children: <Widget>[
-                                  Text("MÍN",
-                                      style: TextStyle(
-                                        fontFamily: 'Open Sans',
-                                        fontSize: 15,
-                                        color: Color.fromARGB(255, 95, 180, 4),
-                                      )
-                                  ),
-                                  this._resultTest((this._controller.avg(this._controller.chartData[2]) - this._controller.standardDeviation(this._controller.chartData[2])), Color.fromARGB(255, 95, 180, 4), true),
-                                ],
-                              ),
-                              Column(
-                                children: <Widget>[
-                                  Text("MÉD",
-                                    style: TextStyle(
-                                      fontFamily: 'Open Sans',
-                                      fontSize: 15,
-                                      color: Color.fromARGB(255, 95, 180, 4),
-                                    )
-                                  ),
-                                  this._resultTest(this._controller.avg(this._controller.chartData[2]), Color.fromARGB(255, 95, 180, 4), true),
-                                ],
-                              ),
-                              Column(
-                                children: <Widget>[
-                                  Text("MÁX",
-                                      style: TextStyle(
-                                        fontFamily: 'Open Sans',
-                                        fontSize: 15,
-                                        color: Color.fromARGB(255, 95, 180, 4),
-                                      )
-                                  ),
-                                  this._resultTest((this._controller.avg(this._controller.chartData[2]) + this._controller.standardDeviation(this._controller.chartData[2])), Color.fromARGB(255, 95, 180, 4), true),
-                                ],
-                              ),
-                            ]
-                        ),
+                                this._titleTest('assets/download.svg', 'DOWNLOAD', Color.fromARGB(255, 250, 88, 88)),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Container(
+                                  height: 100,
+                                  child: Sparkline(
+                                    data: this._controller.chartData[1],
+                                    lineColor: Color.fromARGB(255, 250, 88, 88),
+                                    pointsMode: PointsMode.all,
+                                    pointColor: Color.fromARGB(255, 250, 88, 88),
+                                    fillMode: FillMode.below,
+                                    fillColor: Color.fromARGB(120, 250, 88, 88),
+                                  )
+                                ),
+                                SizedBox(
+                                  height: 2,
+                                ),
+                                Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                    children: <Widget>[
+                                      Column(
+                                        children: <Widget>[
+                                          Text("MÍN",
+                                              style: TextStyle(
+                                                fontFamily: 'Open Sans',
+                                                fontSize: 15,
+                                                color: Color.fromARGB(255, 250, 88, 88),
+                                              )
+                                          ),
+                                          this._resultTest(
+                                              this._controller.minimal(this._controller.chartData[1]),
+                                              Color.fromARGB(255, 250, 88, 88),
+                                              true
+                                          ),
+                                        ],
+                                      ),
+                                      Column(
+                                        children: <Widget>[
+                                          Text("MÉD",
+                                              style: TextStyle(
+                                                fontFamily: 'Open Sans',
+                                                fontSize: 15,
+                                                color: Color.fromARGB(255, 250, 88, 88),
+                                              )
+                                          ),
+                                          this._resultTest(
+                                              this._controller.avg(this._controller.chartData[1]),
+                                              Color.fromARGB(255, 250, 88, 88),
+                                              true
+                                          ),
+                                        ],
+                                      ),
+                                      Column(
+                                        children: <Widget>[
+                                          Text("MÁX",
+                                              style: TextStyle(
+                                                fontFamily: 'Open Sans',
+                                                fontSize: 15,
+                                                color: Color.fromARGB(255, 250, 88, 88),
+                                              )
+                                          ),
+                                          this._resultTest(
+                                              this._controller.maximal(this._controller.chartData[1]),
+                                              Color.fromARGB(255, 250, 88, 88),
+                                              true
+                                          ),
+                                        ],
+                                      ),
+                                    ]
+                                ),
+                                this._titleTest('assets/upload.svg', 'UPLOAD', Color.fromARGB(255, 95, 180, 4)),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Container(
+                                  height: 100,
+                                  child: Sparkline(
+                                    data: this._controller.chartData[2],
+                                    lineColor: Color.fromARGB(255, 95, 180, 4),
+                                    pointsMode: PointsMode.all,
+                                    pointColor: Color.fromARGB(255, 95, 180, 4),
+                                    fillMode: FillMode.below,
+                                    fillColor: Color.fromARGB(120, 95, 180, 4),
+                                  )
+                                ),
+                                SizedBox(
+                                  height: 2,
+                                ),
+                                Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                    children: <Widget>[
+                                      Column(
+                                        children: <Widget>[
+                                          Text("MÍN",
+                                              style: TextStyle(
+                                                fontFamily: 'Open Sans',
+                                                fontSize: 15,
+                                                color: Color.fromARGB(255, 95, 180, 4),
+                                              )
+                                          ),
+                                          this._resultTest(
+                                              this._controller.minimal(this._controller.chartData[2]),
+                                              Color.fromARGB(255, 95, 180, 4),
+                                              true
+                                          ),
+                                        ],
+                                      ),
+                                      Column(
+                                        children: <Widget>[
+                                          Text("MÉD",
+                                              style: TextStyle(
+                                                fontFamily: 'Open Sans',
+                                                fontSize: 15,
+                                                color: Color.fromARGB(255, 95, 180, 4),
+                                              )
+                                          ),
+                                          this._resultTest(
+                                              this._controller.avg(this._controller.chartData[2]),
+                                              Color.fromARGB(255, 95, 180, 4),
+                                              true
+                                          ),
+                                        ],
+                                      ),
+                                      Column(
+                                        children: <Widget>[
+                                          Text("MÁX",
+                                              style: TextStyle(
+                                                fontFamily: 'Open Sans',
+                                                fontSize: 15,
+                                                color: Color.fromARGB(255, 95, 180, 4),
+                                              )
+                                          ),
+                                          this._resultTest(
+                                              this._controller.maximal(this._controller.chartData[2]),
+                                              Color.fromARGB(255, 95, 180, 4),
+                                              true
+                                          ),
+                                        ],
+                                      ),
+                                    ]
+                                ),
 
-                      ],
-                    ): Text("Não existe dados"),
+                              ],
+                            ): Text('Não há dados'),
+                  )
+
                   ],
                 ),
             )
@@ -304,6 +347,12 @@ class _HistoryPageState extends State<HistoryPage>{
         );
       } ,
     );
+  }
+
+  @override
+  void dispose(){
+    super.dispose();
+    this._controller.dispose();
   }
 
 }

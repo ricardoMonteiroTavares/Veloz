@@ -47,7 +47,7 @@ class DBProvider{
 
    Future<List<ResultTest>> getClient(int idServer) async {
     final db = await database;
-    var res = await  db.query("Result", where: "IDSERVER = ?", whereArgs: [idServer]);
+    var res = await  db.query("Result", where: "IDSERVER = ?", whereArgs: [idServer],orderBy: 'ID DESC', limit: 15);
     return res.isNotEmpty ? res.map((c) => ResultTest.fromMap(c)).toList() : [] ;
   }
 }

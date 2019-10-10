@@ -1,4 +1,4 @@
-name: veloz
+name: Veloz
 description: É uma aplicação mobile, onde o usuário irá fazer testes de conexão e acessar o histórico de conectividade da sua rede com os principais sites do Brasil
 
 # The following defines the version and build number for your application.
@@ -11,7 +11,7 @@ description: É uma aplicação mobile, onde o usuário irá fazer testes de con
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 0.10.2
+version: 0.10.3
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
@@ -29,6 +29,8 @@ dependencies:
   path_provider: ^1.3.0
   intl: ^0.16.0
   flutter_sparkline: ^0.1.0
+  connectivity: ^0.4.4
+ # get_ip: ^0.3.0
   #bloc: ^0.15.0
 
 dev_dependencies:
