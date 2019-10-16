@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:veloz/HistoryPage/historyPageController.dart';
+import 'package:Veloz/HistoryPage/historyPageController.dart';
 import 'package:flutter_sparkline/flutter_sparkline.dart';
 
 //import 'package:veloz/HomePage/homePage.dart';
@@ -84,17 +84,20 @@ class _HistoryPageState extends State<HistoryPage>{
         if(this._controller.chartData == null){ return Text('Sem dados');}
         return Scaffold(
           appBar: AppBar(
-            title: Text(
-              'Histórico',
-              style: TextStyle(
+            title: Text('Histórico'),
+            iconTheme: IconThemeData(
+              color: Color.fromARGB(255, 66, 115, 227),
+            ),
+            centerTitle: true,
+            backgroundColor: Colors.white,
+            elevation: 0,
+            textTheme: TextTheme(
+              title: TextStyle(
                 fontFamily: 'Open Sans',
                 fontSize: 30,
                 color: Color.fromARGB(255, 66, 115, 227),
               ),
             ),
-            centerTitle: true,
-            backgroundColor: Colors.white,
-            elevation: 0,
           ),
           backgroundColor: Colors.white,
           body: Container(

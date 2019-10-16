@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:intl/intl.dart';
-import 'package:veloz/objects/database.dart';
-import 'package:veloz/objects/metricsClass.dart';
-import 'package:veloz/objects/resultClass.dart';
+import 'package:Veloz/objects/database.dart';
+import 'package:Veloz/objects/metricsClass.dart';
+import 'package:Veloz/objects/resultClass.dart';
 
 class TestPageController{
   final Metrics _metric = Metrics();

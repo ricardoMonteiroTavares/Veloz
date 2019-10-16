@@ -1,8 +1,12 @@
+/*
+ *  Página Inicial 
+ */
+
 import 'package:flutter/material.dart';
 //import 'package:flutter/services.dart';
-import 'package:veloz/HistoryPage/historyPage.dart';
-import 'package:veloz/HomePage/homePageController.dart';
-import 'package:veloz/TestPage/testPage.dart';
+import 'package:Veloz/HistoryPage/historyPage.dart';
+import 'package:Veloz/HomePage/homePageController.dart';
+import 'package:Veloz/TestPage/testPage.dart';
 //import 'package:connectivity/connectivity.dart';
 //import 'package:get_ip/get_ip.dart';
 
@@ -37,6 +41,7 @@ class _HomePageState extends State<HomePage>{
             // crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
+                // Título do App
                 Text('Veloz',
                   style: TextStyle(
                       fontFamily: 'Poiret One',
@@ -46,6 +51,7 @@ class _HomePageState extends State<HomePage>{
                   textAlign: TextAlign.center,
                 ),
 
+                // Região onde o usuário escolhe o servidor
                 Container(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -78,6 +84,7 @@ class _HomePageState extends State<HomePage>{
                   ),
                 ),
 
+                // Bloco de código onde escolhe se vai realizar o teste ou acessar o histórcio
                 Container(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,

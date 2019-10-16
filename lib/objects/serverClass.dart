@@ -1,3 +1,6 @@
+/* Classe responsável por listar todos os servidores
+  diponíveis para teste.
+   */
 class Server{
   int id;
   String name;

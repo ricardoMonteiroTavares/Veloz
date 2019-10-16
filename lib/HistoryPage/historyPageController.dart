@@ -1,9 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:veloz/objects/database.dart';
-import 'package:veloz/objects/resultClass.dart';
-import 'package:veloz/objects/serverClass.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:Veloz/objects/database.dart';
+import 'package:Veloz/objects/resultClass.dart';
+import 'package:Veloz/objects/serverClass.dart';
 import 'dart:math';
 
 class HistoryPageController{
@@ -24,14 +25,17 @@ class HistoryPageController{
       itens.add(
         DropdownMenuItem(
           value: s, 
-          child: Text(
-            s.name,
-            style: TextStyle(
-              fontFamily: 'Open Sans', 
-              fontSize: 20, 
-              color: Color.fromARGB(255, 66, 115, 227) 
+          child: ListTile(
+            leading: SvgPicture.asset(s.icon, height: 20, width: 20,),
+            title: Text(
+              s.name,
+              style: TextStyle(
+                  fontFamily: 'Open Sans',
+                  fontSize: 20,
+                  color: Color.fromARGB(255, 66, 115, 227)
+              ),
+              //textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
           )
         )
       );
