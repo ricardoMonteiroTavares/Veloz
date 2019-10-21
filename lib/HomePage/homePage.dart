@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:Veloz/HistoryPage/historyPage.dart';
 import 'package:Veloz/HomePage/homePageController.dart';
 import 'package:Veloz/TestPage/testPage.dart';
-//import 'package:connectivity/connectivity.dart';
-//import 'package:get_ip/get_ip.dart';
+import 'package:connectivity/connectivity.dart';
+import 'package:get_ip/get_ip.dart';
 
 class HomePage extends StatefulWidget{
   @override
@@ -18,13 +18,27 @@ class HomePage extends StatefulWidget{
 
 class _HomePageState extends State<HomePage>{
   HomePageController _controller = new HomePageController();
-
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   void initState(){
     this._controller.buildServers();
     this._controller.onChangeItem(this._controller.dropdownMenuItems[0].value);
     super.initState();
   }
+
+  void _errorMessage(){
+    final snackBar = SnackBar(
+      content: Text(
+        "É necessário estar conectado à Internet",
+        style: TextStyle(color: Colors.white),
+      ),
+      duration: new Duration(seconds: 3),
+      backgroundColor: Colors.redAccent,
+    );
+
+    this._scaffoldKey.currentState.showSnackBar(snackBar);
+  }
+
 
   @override
   Widget build(BuildContext context){
@@ -34,6 +48,7 @@ class _HomePageState extends State<HomePage>{
       stream: this._controller.output,
       builder: (context, snapshot){
         return Scaffold(
+          key: _scaffoldKey,
           backgroundColor: Colors.white,
           body: Container(
             padding: EdgeInsets.all(20),
@@ -106,29 +121,18 @@ class _HomePageState extends State<HomePage>{
                               ),
                               padding: EdgeInsets.only(top: 10, bottom: 10),
                               onPressed: () async{
-                                Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                        builder: (context) => TestPage(serverTest: this._controller.selectedServer, ipLocal: 'null')
-                                    )
-                                );
-                                /*
+
                                 var connectivity = await Connectivity().checkConnectivity();
-
                                 if((connectivity == ConnectivityResult.wifi) || (connectivity == ConnectivityResult.mobile)){
-                                  String ip = "NE";
-                                  try {
-                                    ip = await GetIp.ipAddress;
-                                  } on PlatformException {
-                                    ip = 'Falha';
-                                  }
-                                  Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                          builder: (context) => TestPage(serverTest: this._controller.selectedServer, ipLocal: ip)
-                                      )
-                                  );
+                                      String getIP = await GetIp.ipAddress;
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) => TestPage(serverTest: this._controller.selectedServer, ipLocal: getIP)
+                                          )
+                                      );
                                 }else{
-                                }*/
-
+                                   WidgetsBinding.instance.addPostFrameCallback((_) => this._errorMessage());  
+                                }
                               },
                             ),
                           )

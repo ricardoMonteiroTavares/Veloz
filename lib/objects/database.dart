@@ -2,8 +2,8 @@
     Classe responsavel por manipular os dados dos 
     resultados obtidos dos testes no banco de dados SQLite.
 
-    Foi baseado no código do xxx, hospedado no GitHub 
-    através deste link:
+    Foi baseado no código do @Rahiche, hospedado no GitHub 
+    através deste link: https://github.com/Rahiche/sqlite_demo/blob/master/lib/Database.dart
  */
 import 'dart:async';
 import 'dart:io';

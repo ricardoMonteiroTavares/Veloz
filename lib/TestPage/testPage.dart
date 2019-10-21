@@ -156,47 +156,8 @@ class _TestPageState extends State<TestPage>{
                     // quanto o Smartphone com o seu ip
                     Row(
                       children: <Widget>[
-                        ListTile(
-                          leading: SvgPicture.asset(widget.serverTest.icon, height: 40),
-                          title: Text(
-                            widget.serverTest.name,
-                            style: TextStyle(
-                              fontFamily: 'Open Sans',
-                              fontSize: 18,
-                              color: Color.fromARGB(255, 66, 115, 227),
-                            ),
-                          ),
-
-                          subtitle: Text(
-                            widget.serverTest.dns,
-                            style: TextStyle(
-                              fontFamily: 'Open Sans',
-                              //fontSize: (RenderFlex().),
-                              color: Color.fromARGB(255, 66, 115, 227),
-                            ),
-                          ),
-                        ),
-                        ListTile(
-                          trailing: SvgPicture.asset("assets/smartphone.svg", height: 40),
-                          title: Text(
-                            'Seu IP',
-                            style: TextStyle(
-                              fontFamily: 'Open Sans',
-                              fontSize: 18,
-                              color: Color.fromARGB(255, 66, 115, 227),
-                            ),
-                          ),
-
-                          subtitle: Text(
-                            widget.ipLocal,
-                            style: TextStyle(
-                              fontFamily: 'Open Sans',
-                              //fontSize: (RenderFlex().),
-                              color: Color.fromARGB(255, 66, 115, 227),
-                            ),
-                          ),
-                        )
-                        /*
+                        
+                        
                         Container(
                           child: Expanded(
                             child: Row(
@@ -236,7 +197,7 @@ class _TestPageState extends State<TestPage>{
                               ],
                             ),
                           ),
-                        ),*/
+                        ),
                       ],
                     ),
                     // Container responsável por mostrar o  resultado do teste de upload
