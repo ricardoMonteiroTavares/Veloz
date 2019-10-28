@@ -26,7 +26,7 @@ class HistoryPageController{
         DropdownMenuItem(
           value: s, 
           child: ListTile(
-            leading: SvgPicture.asset(s.icon, height: 20, width: 20,),
+            leading: SvgPicture.asset(s.icon, height: 30, width: 30,),
             title: Text(
               s.name,
               style: TextStyle(

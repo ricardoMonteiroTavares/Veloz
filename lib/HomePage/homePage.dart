@@ -73,7 +73,7 @@ class _HomePageState extends State<HomePage>{
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        (' '*5)+'Escolha o servidor para teste:',
+                        (' '*7)+'Escolha o servidor para teste:',
                         style: TextStyle(
                             fontFamily: 'Open Sans',
                             fontSize: 12,
@@ -89,10 +89,8 @@ class _HomePageState extends State<HomePage>{
                         icon: Icon(Icons.keyboard_arrow_down),
                         iconEnabledColor: Color.fromARGB(255, 66, 115, 227),
                         iconSize: 30,
-                        underline: Container(
-                          height: 1,
-                          color: Color.fromARGB(255, 66, 115, 227),
-                        ),
+                        underline: SizedBox(),
+                        
                       ),
 
                     ],

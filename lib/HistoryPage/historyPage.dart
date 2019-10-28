@@ -81,7 +81,13 @@ class _HistoryPageState extends State<HistoryPage>{
     return StreamBuilder(
       stream: this._controller.output,
       builder: (context, snapshot){
-        if(this._controller.chartData == null){ return Text('Sem dados');}
+        if(this._controller.chartData == null){
+          return Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
+            )
+          );
+        }
         return Scaffold(
           appBar: AppBar(
             title: Text('Histórico'),
@@ -115,6 +121,7 @@ class _HistoryPageState extends State<HistoryPage>{
                       icon: Icon(Icons.keyboard_arrow_down),
                       iconEnabledColor: Color.fromARGB(255, 66, 115, 227),
                       iconSize: 30,
+                      underline: SizedBox(),
                     ),
                   ),
 
@@ -124,6 +131,9 @@ class _HistoryPageState extends State<HistoryPage>{
                             this._controller.chartData[2].isNotEmpty)?
                             Column(
                               children: <Widget>[
+                                SizedBox(
+                                  height: 10,
+                                ),
                                 this._titleTest('assets/ping.svg', 'PING', Color.fromARGB(255, 255, 165, 0)),
                                 SizedBox(
                                   height: 5,
@@ -195,7 +205,9 @@ class _HistoryPageState extends State<HistoryPage>{
                                       ),
                                     ]
                                 ),
-
+                                SizedBox(
+                                  height: 10,
+                                ),
                                 this._titleTest('assets/download.svg', 'DOWNLOAD', Color.fromARGB(255, 250, 88, 88)),
                                 SizedBox(
                                   height: 5,
@@ -266,6 +278,9 @@ class _HistoryPageState extends State<HistoryPage>{
                                         ],
                                       ),
                                     ]
+                                ),
+                                SizedBox(
+                                  height: 10,
                                 ),
                                 this._titleTest('assets/upload.svg', 'UPLOAD', Color.fromARGB(255, 95, 180, 4)),
                                 SizedBox(
@@ -340,7 +355,27 @@ class _HistoryPageState extends State<HistoryPage>{
                                 ),
 
                               ],
-                            ): Text('Não há dados'),
+                            // Bloco de código onde mostra um erro de não haver dados para
+                            // Levantar o gráfico
+                            ):Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  Text(":(", 
+                                    style: TextStyle(
+                                      color: Color.fromARGB(255, 66, 115, 227),
+                                      fontSize: 80
+                                    ),
+                                  ),
+                                  SizedBox(height: 10,),
+                                  Text("Não contém dados!",
+                                    style: TextStyle(
+                                      color: Color.fromARGB(255, 66, 115, 227),
+                                      fontSize: 30
+                                    ),
+                                  )
+                                ],
+                              )
+                            
                   )
 
                   ],
