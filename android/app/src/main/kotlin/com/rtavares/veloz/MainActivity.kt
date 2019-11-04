@@ -1,4 +1,4 @@
-package com.example.veloz
+package com.rtavares.veloz
 
 import android.os.Bundle
 
