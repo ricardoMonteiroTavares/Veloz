@@ -3,7 +3,6 @@
  */
 
 import 'package:flutter/material.dart';
-//import 'package:flutter/services.dart';
 import 'package:Veloz/HistoryPage/historyPage.dart';
 import 'package:Veloz/HomePage/homePageController.dart';
 import 'package:Veloz/TestPage/testPage.dart';
@@ -21,7 +20,7 @@ class _HomePageState extends State<HomePage>{
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   void initState(){
-    this._controller.buildServers();
+    this._controller.loadServers();
     this._controller.onChangeItem(this._controller.dropdownMenuItems[0].value);
     super.initState();
   }
@@ -42,8 +41,6 @@ class _HomePageState extends State<HomePage>{
 
   @override
   Widget build(BuildContext context){
-    // TODO: implement build
-
     return StreamBuilder(
       stream: this._controller.output,
       builder: (context, snapshot){
@@ -53,7 +50,6 @@ class _HomePageState extends State<HomePage>{
           body: Container(
             padding: EdgeInsets.all(20),
             child: Column(
-            // crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 // Título do App

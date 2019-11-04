@@ -1,6 +1,7 @@
+import 'package:Veloz/functions/resultTest.dart' as result;
+import 'package:Veloz/functions/titleTest.dart' as title;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:Veloz/HistoryPage/historyPageController.dart';
 import 'package:flutter_sparkline/flutter_sparkline.dart';
 
@@ -17,67 +18,73 @@ class _HistoryPageState extends State<HistoryPage>{
 
   @override
   void initState(){
-    this._controller.buildServers();
+    this._controller.loadServers();
     this._controller.onChangeItem(this._controller.dropdownMenuItems[0].value);
     
     super.initState();
   }
 
-  Widget _titleTest(String icon, String type, Color color){
+  Widget _lineResults(Color color, List<double> data, bool type){
     return Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            SvgPicture.asset(icon, height: 40, width: 40,),
-            SizedBox(
-              width: 15,
-            ),
-            Text(
-              type,
-              style: TextStyle(
-                fontFamily: 'Open Sans',
-                fontSize: 20,
-                color: color,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          Column(
+            children: <Widget>[
+              Text("MÍN",
+                  style: TextStyle(
+                    fontFamily: 'Open Sans',
+                    fontSize: 15,
+                    color: color,
+                  )
               ),
-            )
-          ],
-        );
-  }
-
-  Widget _resultTest(int value, Color color, bool type){
-    String metric;
-    if(type){
-      metric = 'kbps';
-    }else{
-      metric = 'ms';
-    }
-    return RichText(
-      text: TextSpan(
-          children: <TextSpan>[
-            TextSpan(
-                text: (value == null)? '--' : value.toString(),
-                style: TextStyle(
-                  fontFamily: 'Offside',
-                  fontSize: 25,
-                  color: color,
-                )
-            ),
-            TextSpan(
-                text: (value == null)? '' : metric,
-                style: TextStyle(
-                  fontFamily: 'Open Sans Condensed',
-                  fontSize: 12,
-                  color: color,
-                )
-            ),
-          ]
-      ),
+              result.resultTest(
+                  this._controller.minimal(data),
+                  color,
+                  type, false
+              ),
+            ],
+          ),
+          Column(
+            children: <Widget>[
+              Text("MÉD",
+                  style: TextStyle(
+                    fontFamily: 'Open Sans',
+                    fontSize: 15,
+                    color: color,
+                  )
+              ),
+              result.resultTest(
+                  this._controller.avg(data),
+                  color,
+                  type, false
+              ),
+            ],
+          ),
+          Column(
+            children: <Widget>[
+              Text("MÁX",
+                  style: TextStyle(
+                    fontFamily: 'Open Sans',
+                    fontSize: 15,
+                    color: color,
+                  )
+              ),
+              result.resultTest(
+                  this._controller.maximal(data),
+                  color,
+                  type, false
+              ),
+            ],
+          ),
+        ]
     );
   }
 
+  bool _dataExists(List<List<double>> data)
+    => ((data[0].length >= 2) && (data[1].length >= 2) && (data[2].length >= 2));
+
   @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    
+  Widget build(BuildContext context) {    
     return StreamBuilder(
       stream: this._controller.output,
       builder: (context, snapshot){
@@ -124,17 +131,17 @@ class _HistoryPageState extends State<HistoryPage>{
                       underline: SizedBox(),
                     ),
                   ),
-
+                            //this._controller.chartData[0].isNotEmpty &&
+                            //this._controller.chartData[1].isNotEmpty &&
+                            //this._controller.chartData[2].isNotEmpty
                   Container(
-                    child: (this._controller.chartData[0].isNotEmpty &&
-                            this._controller.chartData[1].isNotEmpty &&
-                            this._controller.chartData[2].isNotEmpty)?
+                    child: (this._dataExists(this._controller.chartData))?
                             Column(
                               children: <Widget>[
                                 SizedBox(
                                   height: 10,
                                 ),
-                                this._titleTest('assets/ping.svg', 'PING', Color.fromARGB(255, 255, 165, 0)),
+                                title.titleTest('assets/ping.svg', 'PING', Color.fromARGB(255, 255, 165, 0), false),
                                 SizedBox(
                                   height: 5,
                                 ),
@@ -152,63 +159,11 @@ class _HistoryPageState extends State<HistoryPage>{
                                 SizedBox(
                                   height: 2,
                                 ),
-                                Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                    children: <Widget>[
-                                      Column(
-                                        children: <Widget>[
-                                          Text("MÍN",
-                                              style: TextStyle(
-                                                fontFamily: 'Open Sans',
-                                                fontSize: 15,
-                                                color: Color.fromARGB(255, 255, 165, 0),
-                                              )
-                                          ),
-                                          this._resultTest(
-                                              this._controller.minimal(this._controller.chartData[0]),
-                                              Color.fromARGB(255, 255, 165, 0),
-                                              false
-                                          ),
-                                        ],
-                                      ),
-                                      Column(
-                                        children: <Widget>[
-                                          Text("MÉD",
-                                              style: TextStyle(
-                                                fontFamily: 'Open Sans',
-                                                fontSize: 15,
-                                                color: Color.fromARGB(255, 255, 165, 0),
-                                              )
-                                          ),
-                                          this._resultTest(
-                                              this._controller.avg(this._controller.chartData[0]),
-                                              Color.fromARGB(255, 255, 165, 0),
-                                              false
-                                          ),
-                                        ],
-                                      ),
-                                      Column(
-                                        children: <Widget>[
-                                          Text("MÁX",
-                                              style: TextStyle(
-                                                fontFamily: 'Open Sans',
-                                                fontSize: 15,
-                                                color: Color.fromARGB(255, 255, 165, 0),
-                                              )
-                                          ),
-                                          this._resultTest(
-                                              this._controller.maximal(this._controller.chartData[0]),
-                                              Color.fromARGB(255, 255, 165, 0),
-                                              false
-                                          ),
-                                        ],
-                                      ),
-                                    ]
-                                ),
+                                this._lineResults(Color.fromARGB(255, 255, 165, 0), this._controller.chartData[0], false),
                                 SizedBox(
                                   height: 10,
                                 ),
-                                this._titleTest('assets/download.svg', 'DOWNLOAD', Color.fromARGB(255, 250, 88, 88)),
+                                title.titleTest('assets/download.svg', 'DOWNLOAD', Color.fromARGB(255, 250, 88, 88), false),
                                 SizedBox(
                                   height: 5,
                                 ),
@@ -226,63 +181,11 @@ class _HistoryPageState extends State<HistoryPage>{
                                 SizedBox(
                                   height: 2,
                                 ),
-                                Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                    children: <Widget>[
-                                      Column(
-                                        children: <Widget>[
-                                          Text("MÍN",
-                                              style: TextStyle(
-                                                fontFamily: 'Open Sans',
-                                                fontSize: 15,
-                                                color: Color.fromARGB(255, 250, 88, 88),
-                                              )
-                                          ),
-                                          this._resultTest(
-                                              this._controller.minimal(this._controller.chartData[1]),
-                                              Color.fromARGB(255, 250, 88, 88),
-                                              true
-                                          ),
-                                        ],
-                                      ),
-                                      Column(
-                                        children: <Widget>[
-                                          Text("MÉD",
-                                              style: TextStyle(
-                                                fontFamily: 'Open Sans',
-                                                fontSize: 15,
-                                                color: Color.fromARGB(255, 250, 88, 88),
-                                              )
-                                          ),
-                                          this._resultTest(
-                                              this._controller.avg(this._controller.chartData[1]),
-                                              Color.fromARGB(255, 250, 88, 88),
-                                              true
-                                          ),
-                                        ],
-                                      ),
-                                      Column(
-                                        children: <Widget>[
-                                          Text("MÁX",
-                                              style: TextStyle(
-                                                fontFamily: 'Open Sans',
-                                                fontSize: 15,
-                                                color: Color.fromARGB(255, 250, 88, 88),
-                                              )
-                                          ),
-                                          this._resultTest(
-                                              this._controller.maximal(this._controller.chartData[1]),
-                                              Color.fromARGB(255, 250, 88, 88),
-                                              true
-                                          ),
-                                        ],
-                                      ),
-                                    ]
-                                ),
+                                this._lineResults(Color.fromARGB(255, 250, 88, 88), this._controller.chartData[1], true),
                                 SizedBox(
                                   height: 10,
                                 ),
-                                this._titleTest('assets/upload.svg', 'UPLOAD', Color.fromARGB(255, 95, 180, 4)),
+                                title.titleTest('assets/upload.svg', 'UPLOAD', Color.fromARGB(255, 95, 180, 4), false),
                                 SizedBox(
                                   height: 5,
                                 ),
@@ -300,59 +203,7 @@ class _HistoryPageState extends State<HistoryPage>{
                                 SizedBox(
                                   height: 2,
                                 ),
-                                Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                    children: <Widget>[
-                                      Column(
-                                        children: <Widget>[
-                                          Text("MÍN",
-                                              style: TextStyle(
-                                                fontFamily: 'Open Sans',
-                                                fontSize: 15,
-                                                color: Color.fromARGB(255, 95, 180, 4),
-                                              )
-                                          ),
-                                          this._resultTest(
-                                              this._controller.minimal(this._controller.chartData[2]),
-                                              Color.fromARGB(255, 95, 180, 4),
-                                              true
-                                          ),
-                                        ],
-                                      ),
-                                      Column(
-                                        children: <Widget>[
-                                          Text("MÉD",
-                                              style: TextStyle(
-                                                fontFamily: 'Open Sans',
-                                                fontSize: 15,
-                                                color: Color.fromARGB(255, 95, 180, 4),
-                                              )
-                                          ),
-                                          this._resultTest(
-                                              this._controller.avg(this._controller.chartData[2]),
-                                              Color.fromARGB(255, 95, 180, 4),
-                                              true
-                                          ),
-                                        ],
-                                      ),
-                                      Column(
-                                        children: <Widget>[
-                                          Text("MÁX",
-                                              style: TextStyle(
-                                                fontFamily: 'Open Sans',
-                                                fontSize: 15,
-                                                color: Color.fromARGB(255, 95, 180, 4),
-                                              )
-                                          ),
-                                          this._resultTest(
-                                              this._controller.maximal(this._controller.chartData[2]),
-                                              Color.fromARGB(255, 95, 180, 4),
-                                              true
-                                          ),
-                                        ],
-                                      ),
-                                    ]
-                                ),
+                                this._lineResults(Color.fromARGB(255, 95, 180, 4), this._controller.chartData[2], true),
 
                               ],
                             // Bloco de código onde mostra um erro de não haver dados para
@@ -367,11 +218,12 @@ class _HistoryPageState extends State<HistoryPage>{
                                     ),
                                   ),
                                   SizedBox(height: 10,),
-                                  Text("Não contém dados!",
+                                  Text("Não há dados suficentes!",
                                     style: TextStyle(
                                       color: Color.fromARGB(255, 66, 115, 227),
-                                      fontSize: 30
+                                      fontSize: 30,
                                     ),
+                                    textAlign: TextAlign.center,
                                   )
                                 ],
                               )

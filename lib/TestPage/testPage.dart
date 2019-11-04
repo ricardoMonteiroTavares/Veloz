@@ -2,6 +2,8 @@
  * Página responsável por mostrar os testes a serem realizados, dado um servidor de entrada.
  */
 
+import 'package:Veloz/functions/titleTest.dart' as title;
+import 'package:Veloz/functions/resultTest.dart' as result;
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
@@ -44,60 +46,7 @@ class _TestPageState extends State<TestPage>{
 
     super.initState();
   }
-
-  // Função respnsável por gerar o design dos títulos dos testes 
-  Widget _titleTest(String icon, String type, Color color){
-    return Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            SvgPicture.asset(icon, height: 25, width: 25,),
-            SizedBox(
-              width: 15,
-            ),
-            Text(
-              type,
-              style: TextStyle(
-                fontFamily: 'Open Sans',
-                fontSize: 16,
-                color: color,
-              ),
-            )
-          ],
-        );
-  }
-
-  // Função responsável por mostrar os resultados a serem obtidos pelos testes
-  Widget _resultTest(int value, Color color, bool type){
-    String metric;
-    if(type){
-      metric = 'kbps';
-    }else{
-      metric = 'ms';
-    }
-    return RichText(
-          text: TextSpan(
-            children: <TextSpan>[
-              TextSpan(
-                text: (value == null)? '--' : value.toString(),
-                style: TextStyle(
-                  fontFamily: 'Offside',
-                  fontSize: 50,
-                  color: color,
-                )
-              ),
-              TextSpan(
-                text: (value == null)? '' : metric,
-                style: TextStyle(
-                  fontFamily: 'Open Sans Condensed',
-                  fontSize: 25,
-                  color: color,
-                )
-              ),
-            ]
-          ),
-        );              
-  }
-
+  
   // Função responsável pelo design tanto do servidor a ser testado, quanto para o ip do Smartphone 
   Widget _connectInfo(String name, String dns, Color color){
     return Column(
@@ -125,7 +74,6 @@ class _TestPageState extends State<TestPage>{
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return StreamBuilder(
       stream: this._controller.output,
       builder: (context, snapshot) {
@@ -204,8 +152,8 @@ class _TestPageState extends State<TestPage>{
                     Container(
                       child: Column(
                         children: <Widget>[
-                          this._titleTest('assets/upload.svg', 'UPLOAD', Color.fromARGB(255, 95, 180, 4)),
-                          this._resultTest(this._controller.result.upAvg, Color.fromARGB(255, 95, 180, 4), true),
+                          title.titleTest('assets/upload.svg', 'UPLOAD', Color.fromARGB(255, 95, 180, 4), true),
+                          result.resultTest(this._controller.result.upAvg, Color.fromARGB(255, 95, 180, 4), true, true),
                         ],
                       ),
                     ),
@@ -214,8 +162,8 @@ class _TestPageState extends State<TestPage>{
                     Container(
                       child: Column(
                         children: <Widget>[
-                          this._titleTest('assets/download.svg', 'DOWNLOAD', Color.fromARGB(255, 250, 88, 88)),
-                          this._resultTest(this._controller.result.downAvg, Color.fromARGB(255, 250, 88, 88), true),
+                          title.titleTest('assets/download.svg', 'DOWNLOAD', Color.fromARGB(255, 250, 88, 88), true),
+                          result.resultTest(this._controller.result.downAvg, Color.fromARGB(255, 250, 88, 88), true, true),
                         ],
                       ),
                     ),
@@ -224,8 +172,8 @@ class _TestPageState extends State<TestPage>{
                     Container(
                       child: Column(
                         children: <Widget>[
-                          this._titleTest('assets/ping.svg', 'PING', Color.fromARGB(255, 255, 165, 0)),
-                          this._resultTest(this._controller.result.pingAvg, Color.fromARGB(255, 255, 165, 0), false),
+                          title.titleTest('assets/ping.svg', 'PING', Color.fromARGB(255, 255, 165, 0), true),
+                          result.resultTest(this._controller.result.pingAvg, Color.fromARGB(255, 255, 165, 0), false, true),
                         ],
                       ),
                     ),
