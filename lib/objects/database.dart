@@ -35,12 +35,12 @@ class DBProvider{
     return await openDatabase(path, version: 1, onOpen: (db) {},
         onCreate: (Database db, int version) async {
       await db.execute("CREATE TABLE Result ("
-          "ID       INTEGER PRIMARY KEY AUTOINCREMENT,"
-          "IDSERVER INTEGER NOT NULL,"
-          "PINGAVG  INTEGER NOT NULL,"
-          "DOWNAVG  INTEGER NOT NULL,"
-          "UPAVG    INTEGER NOT NULL,"
-          "DATE     TEXT    NOT NULL"
+          "ID           INTEGER PRIMARY KEY AUTOINCREMENT,"
+          "IDSERVER     INTEGER NOT NULL,"
+          "LATENCYAVG   INTEGER NOT NULL,"
+          "DOWNAVG      INTEGER NOT NULL,"
+          "UPAVG        INTEGER NOT NULL,"
+          "DATE         TEXT    NOT NULL"
           ")");
     });
   }
@@ -49,8 +49,8 @@ class DBProvider{
   insertResult(ResultTest result) async {
     final db = await database;
     var res = await db.rawInsert(
-      "INSERT INTO Result (IDSERVER,PINGAVG,DOWNAVG,UPAVG,DATE)"
-      " VALUES (${result.idServer},${result.pingAvg},${result.downAvg},${result.upAvg},${result.date})");
+      "INSERT INTO Result (IDSERVER,latencyAVG,DOWNAVG,UPAVG,DATE)"
+      " VALUES (${result.idServer},${result.latencyAvg},${result.downAvg},${result.upAvg},${result.date})");
     return res;
   }
 

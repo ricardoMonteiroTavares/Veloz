@@ -5,17 +5,17 @@
 class ResultTest{
   int idServer;
 
-  int pingAvg;
+  int latencyAvg;
   int downAvg;
   int upAvg;
   String date;
 
-  ResultTest({this.idServer, this.pingAvg, this.downAvg, this.upAvg, this.date});
+  ResultTest({this.idServer, this.latencyAvg, this.downAvg, this.upAvg, this.date});
 
   // Função que converte os dados recebidos do banco de dados em uma classe ResultTest 
   factory ResultTest.fromMap(Map<String, dynamic> json) => new ResultTest(
         idServer: json["IDSERVER"],
-        pingAvg: json["PINGAVG"],
+        latencyAvg: json["LATENCYAVG"],
         downAvg: json["DOWNAVG"],
         upAvg: json["UPAVG"],
         date: json["DATE"],

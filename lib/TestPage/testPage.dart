@@ -34,10 +34,10 @@ class _TestPageState extends State<TestPage>{
 
   @override
   void initState(){
-    // Trecho responsável pelos testes de ping, download e upload 
-    if(this._controller.result.pingAvg == null){
-      this._controller.pingTest(widget.serverTest.dns);
-      if(this._controller.result.pingAvg == -1){
+    // Trecho responsável pelos testes de latency, download e upload 
+    if(this._controller.result.latencyAvg == null){
+      this._controller.latencyTest(widget.serverTest.dns);
+      if(this._controller.result.latencyAvg == -1){
         this._showDialogError();
       }
     }
@@ -127,8 +127,6 @@ class _TestPageState extends State<TestPage>{
                     // quanto o Smartphone com o seu ip
                     Row(
                       children: <Widget>[
-                        
-                        
                         Container(
                           child: Expanded(
                             child: Row(
@@ -205,12 +203,12 @@ class _TestPageState extends State<TestPage>{
                               ),
                             ),
 
-                            // Container responsável por mostrar o  resultado do teste de ping
+                            // Container responsável por mostrar o  resultado do teste de latência
                             Container(
                               child: Column(
                                 children: <Widget>[
-                                  title.titleTest('assets/ping.svg', 'PING', Color.fromARGB(255, 255, 165, 0)),
-                                  result.resultTest(this._controller.result.pingAvg, Color.fromARGB(255, 255, 165, 0), false, true),
+                                  title.titleTest('assets/latency.svg', 'LATÊNCIA', Color.fromARGB(255, 255, 165, 0)),
+                                  result.resultTest(this._controller.result.latencyAvg, Color.fromARGB(255, 255, 165, 0), false, true),
                                 ],
                               ),
                             ),
@@ -221,7 +219,7 @@ class _TestPageState extends State<TestPage>{
 
                     // É o botão onde só é visível e funcional qunado termina os testes
                     Visibility(
-                      visible: ((this._controller.result.upAvg != null) && (this._controller.result.downAvg != null) && (this._controller.result.pingAvg != null)),
+                      visible: ((this._controller.result.upAvg != null) && (this._controller.result.downAvg != null) && (this._controller.result.latencyAvg != null)),
                       child: Row(
                         children: <Widget>[
                           Expanded(

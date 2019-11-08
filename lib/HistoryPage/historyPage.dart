@@ -1,5 +1,6 @@
 import 'package:Veloz/functions/resultTest.dart' as result;
 import 'package:Veloz/functions/titleTest.dart' as title;
+import 'package:Veloz/functions/avg.dart' as average;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:Veloz/HistoryPage/historyPageController.dart';
@@ -54,7 +55,7 @@ class _HistoryPageState extends State<HistoryPage>{
                   )
               ),
               result.resultTest(
-                  this._controller.avg(data),
+                  average.avg(data),
                   color,
                   type, false
               ),
@@ -141,7 +142,7 @@ class _HistoryPageState extends State<HistoryPage>{
                                 SizedBox(
                                   height: 10,
                                 ),
-                                title.titleTest('assets/ping.svg', 'PING', Color.fromARGB(255, 255, 165, 0)),
+                                title.titleTest('assets/latency.svg', 'LATÊNCIA', Color.fromARGB(255, 255, 165, 0)),
                                 SizedBox(
                                   height: 5,
                                 ),

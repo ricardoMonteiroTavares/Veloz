@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:Veloz/functions/loadServers.dart' as load;
+import 'package:Veloz/functions/avg.dart' as average;
 import 'package:flutter/material.dart';
 import 'package:Veloz/objects/database.dart';
 import 'package:Veloz/objects/resultClass.dart';
@@ -36,19 +37,15 @@ class HistoryPageController{
 
     this.chartData = [[],[],[]];
     for(ResultTest i in data){
-      this.chartData[0].insert(0,i.pingAvg.toDouble());
+      this.chartData[0].insert(0,i.latencyAvg.toDouble());
       this.chartData[1].insert(0,i.downAvg.toDouble());
       this.chartData[2].insert(0,i.upAvg.toDouble());
     }
     this._streamController.add(this.chartData);
   }
 
-  int avg(List<double> data){
-    return ((data.reduce((curr, next) => curr + next))/data.length).round();
-  }
-
   int _standardDeviation(List<double> data){
-    int avg = this.avg(data);
+    int avg = average.avg(data);
     int total = 0;
     for (double i in data){
       total += pow((i-avg),2).toInt();
@@ -59,7 +56,7 @@ class HistoryPageController{
   }
 
   int minimal(List<double> data){
-    int value = (this.avg(data) - this._standardDeviation(data));
+    int value = (average.avg(data) - this._standardDeviation(data));
     if (value < 0){
       return 0;
     }
@@ -67,7 +64,7 @@ class HistoryPageController{
   }
 
   int maximal(List<double> data)
-    => (this.avg(data) + this._standardDeviation(data));
+    => (average.avg(data) + this._standardDeviation(data));
 
   void dispose(){
     this._streamController.close();
