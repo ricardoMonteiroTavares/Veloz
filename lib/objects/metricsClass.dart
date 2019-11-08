@@ -16,10 +16,15 @@ class Metrics {
     // Bloco de código que fará o teste 15 vezes
     for(int j = 0; j < 15; j++){
       i = DateTime.now();                       // Inicia o contador
-      s = await Socket.connect(ip,80);          // O socket tenta abrir a conexão
-      f = DateTime.now();                       // Após a mensagem de retorno, termina o contador
-      s.close();                                // Fecha a conexão
-      ping += f.difference(i).inMilliseconds;   // Adiciona o tempo cronometrado ao contador ping
+      try{
+        s = await Socket.connect(ip,80);          // O socket tenta abrir a conexão
+        f = DateTime.now();                       // Após a mensagem de retorno, termina o contador
+        s.close();                                // Fecha a conexão
+        ping += f.difference(i).inMilliseconds;   // Adiciona o tempo cronometrado ao contador ping
+      }catch(e){
+        return -1;
+      }
+     
     }
     return (ping/15).round();                   // Retorna a média de ping
   }

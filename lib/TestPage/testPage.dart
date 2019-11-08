@@ -4,6 +4,7 @@
 
 import 'package:Veloz/functions/titleTest.dart' as title;
 import 'package:Veloz/functions/resultTest.dart' as result;
+import 'package:Veloz/objects/customPainter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
@@ -36,6 +37,9 @@ class _TestPageState extends State<TestPage>{
     // Trecho responsável pelos testes de ping, download e upload 
     if(this._controller.result.pingAvg == null){
       this._controller.pingTest(widget.serverTest.dns);
+      if(this._controller.result.pingAvg == -1){
+        this._showDialogError();
+      }
     }
     if(this._controller.result.downAvg == null){
       this._controller.downloadTest(widget.serverTest.host);
@@ -47,6 +51,24 @@ class _TestPageState extends State<TestPage>{
     super.initState();
   }
   
+  Future _showDialogError() async{
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: Text('Ih, deu ruim :('),
+        content: Text('Não conseguimos conectar no Servidor! \\n Tente novamente mais tarde.'),
+        actions: <Widget>[
+            FlatButton(
+              child: Text('OK'),
+              onPressed: (){
+                Navigator.of(context).pop();
+              },
+            )
+        ],
+      )
+    );
+  }
+
   // Função responsável pelo design tanto do servidor a ser testado, quanto para o ip do Smartphone 
   Widget _connectInfo(String name, String dns, Color color){
     return Column(
@@ -96,7 +118,8 @@ class _TestPageState extends State<TestPage>{
             onWillPop: () => Future.value(false),
             child: Container(
               padding: EdgeInsets.all(20),
-              child: Column(
+              child: SingleChildScrollView( 
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
 
@@ -148,34 +171,52 @@ class _TestPageState extends State<TestPage>{
                         ),
                       ],
                     ),
-                    // Container responsável por mostrar o  resultado do teste de upload
-                    Container(
-                      child: Column(
-                        children: <Widget>[
-                          title.titleTest('assets/upload.svg', 'UPLOAD', Color.fromARGB(255, 95, 180, 4), true),
-                          result.resultTest(this._controller.result.upAvg, Color.fromARGB(255, 95, 180, 4), true, true),
-                        ],
-                      ),
+                    SizedBox(
+                      height: 25,
                     ),
+                    Stack(
+                      children: <Widget>[
+                        CustomPaint(
+                          painter: CurvePainter(),
+                          child: Container(height: 150),
+                        ),
+                        Column(
+                          children: <Widget>[
+                            SizedBox(
+                              height: 65,
+                            ),
+                            // Container responsável por mostrar o  resultado do teste de upload
+                            Container(
+                              child: Column(
+                                children: <Widget>[
+                                  title.titleTest('assets/upload.svg', 'UPLOAD', Color.fromARGB(255, 95, 180, 4)),
+                                  result.resultTest(this._controller.result.upAvg, Color.fromARGB(255, 95, 180, 4), true, true),
+                                ],
+                              ),
+                            ),
 
-                    // Container responsável por mostrar o  resultado do teste de download
-                    Container(
-                      child: Column(
-                        children: <Widget>[
-                          title.titleTest('assets/download.svg', 'DOWNLOAD', Color.fromARGB(255, 250, 88, 88), true),
-                          result.resultTest(this._controller.result.downAvg, Color.fromARGB(255, 250, 88, 88), true, true),
-                        ],
-                      ),
-                    ),
+                            // Container responsável por mostrar o  resultado do teste de download
+                            Container(
+                              child: Column(
+                                children: <Widget>[
+                                  title.titleTest('assets/download.svg', 'DOWNLOAD', Color.fromARGB(255, 250, 88, 88)),
+                                  result.resultTest(this._controller.result.downAvg, Color.fromARGB(255, 250, 88, 88), true, true),
+                                ],
+                              ),
+                            ),
 
-                    // Container responsável por mostrar o  resultado do teste de ping
-                    Container(
-                      child: Column(
-                        children: <Widget>[
-                          title.titleTest('assets/ping.svg', 'PING', Color.fromARGB(255, 255, 165, 0), true),
-                          result.resultTest(this._controller.result.pingAvg, Color.fromARGB(255, 255, 165, 0), false, true),
-                        ],
-                      ),
+                            // Container responsável por mostrar o  resultado do teste de ping
+                            Container(
+                              child: Column(
+                                children: <Widget>[
+                                  title.titleTest('assets/ping.svg', 'PING', Color.fromARGB(255, 255, 165, 0)),
+                                  result.resultTest(this._controller.result.pingAvg, Color.fromARGB(255, 255, 165, 0), false, true),
+                                ],
+                              ),
+                            ),
+                          ]
+                        ),
+                      ],
                     ),
 
                     // É o botão onde só é visível e funcional qunado termina os testes
@@ -210,7 +251,8 @@ class _TestPageState extends State<TestPage>{
                     ),
 
                   ]
-              ),
+                ),
+              )
             )
           ),
         );

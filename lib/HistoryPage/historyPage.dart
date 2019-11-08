@@ -141,7 +141,7 @@ class _HistoryPageState extends State<HistoryPage>{
                                 SizedBox(
                                   height: 10,
                                 ),
-                                title.titleTest('assets/ping.svg', 'PING', Color.fromARGB(255, 255, 165, 0), false),
+                                title.titleTest('assets/ping.svg', 'PING', Color.fromARGB(255, 255, 165, 0)),
                                 SizedBox(
                                   height: 5,
                                 ),
@@ -163,7 +163,7 @@ class _HistoryPageState extends State<HistoryPage>{
                                 SizedBox(
                                   height: 10,
                                 ),
-                                title.titleTest('assets/download.svg', 'DOWNLOAD', Color.fromARGB(255, 250, 88, 88), false),
+                                title.titleTest('assets/download.svg', 'DOWNLOAD', Color.fromARGB(255, 250, 88, 88)),
                                 SizedBox(
                                   height: 5,
                                 ),
@@ -185,7 +185,7 @@ class _HistoryPageState extends State<HistoryPage>{
                                 SizedBox(
                                   height: 10,
                                 ),
-                                title.titleTest('assets/upload.svg', 'UPLOAD', Color.fromARGB(255, 95, 180, 4), false),
+                                title.titleTest('assets/upload.svg', 'UPLOAD', Color.fromARGB(255, 95, 180, 4)),
                                 SizedBox(
                                   height: 5,
                                 ),
