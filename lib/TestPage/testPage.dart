@@ -1,10 +1,11 @@
+import 'dart:async';
+
 /**
  * Página responsável por mostrar os testes a serem realizados, dado um servidor de entrada.
  */
 
 import 'package:Veloz/functions/titleTest.dart' as title;
 import 'package:Veloz/functions/resultTest.dart' as result;
-import 'package:Veloz/objects/customPainter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
@@ -31,6 +32,7 @@ class TestPage extends StatefulWidget{
 
 class _TestPageState extends State<TestPage>{
   final TestPageController _controller = TestPageController();
+  Timer timer = Timer.periodic(const Duration(seconds: 2),(Timer t) => this._controller.invertOpacity());
 
   @override
   void initState(){
@@ -69,31 +71,7 @@ class _TestPageState extends State<TestPage>{
     );
   }
 
-  // Função responsável pelo design tanto do servidor a ser testado, quanto para o ip do Smartphone 
-  Widget _connectInfo(String name, String dns, Color color){
-    return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            name,
-            style: TextStyle(
-              fontFamily: 'Open Sans',
-              fontSize: 18,
-              color: color,
-            ),
-          ),
-          Text(
-            dns,
-            style: TextStyle(
-              fontFamily: 'Open Sans',
-              //fontSize: (RenderFlex().),
-              color: color,
-            ),
-          ),
-        ],
-      );
-  }
-
+  
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -141,7 +119,7 @@ class _TestPageState extends State<TestPage>{
                                 SizedBox(
                                   width: 5,
                                 ),
-                                this._connectInfo(widget.serverTest.name, widget.serverTest.dns, Color.fromARGB(255, 66, 115, 227)),
+                                this._controller.connectInfo(widget.serverTest.name, widget.serverTest.dns, Color.fromARGB(255, 66, 115, 227)),
 
                               ],
                             ),
@@ -154,7 +132,7 @@ class _TestPageState extends State<TestPage>{
                               mainAxisAlignment: MainAxisAlignment.end,
                               mainAxisSize: MainAxisSize.min,
                               children: <Widget>[
-                                this._connectInfo("Seu IP", widget.ipLocal, Color.fromARGB(255, 66, 115, 227)),
+                                this._controller.connectInfo("Seu IP", widget.ipLocal, Color.fromARGB(255, 66, 115, 227)),
                                 SizedBox(
                                   width: 5,
                                 ),
@@ -172,51 +150,44 @@ class _TestPageState extends State<TestPage>{
                     SizedBox(
                       height: 25,
                     ),
-                    Stack(
-                      children: <Widget>[
-                        CustomPaint(
-                          painter: CurvePainter(),
-                          child: Container(height: 150),
-                        ),
-                        Column(
+                    // Container responsável por mostrar o  resultado do teste de upload
+                    Visibility(
+                      visible: ((this._controller.result.latencyAvg != null) && (this._controller.result.downAvg != null)),
+                      child: Container(
+                        child: Column(
                           children: <Widget>[
-                            SizedBox(
-                              height: 65,
-                            ),
-                            // Container responsável por mostrar o  resultado do teste de upload
-                            Container(
-                              child: Column(
-                                children: <Widget>[
-                                  title.titleTest('assets/upload.svg', 'UPLOAD', Color.fromARGB(255, 95, 180, 4)),
-                                  result.resultTest(this._controller.result.upAvg, Color.fromARGB(255, 95, 180, 4), true, true),
-                                ],
-                              ),
-                            ),
-
-                            // Container responsável por mostrar o  resultado do teste de download
-                            Container(
-                              child: Column(
-                                children: <Widget>[
-                                  title.titleTest('assets/download.svg', 'DOWNLOAD', Color.fromARGB(255, 250, 88, 88)),
-                                  result.resultTest(this._controller.result.downAvg, Color.fromARGB(255, 250, 88, 88), true, true),
-                                ],
-                              ),
-                            ),
-
-                            // Container responsável por mostrar o  resultado do teste de latência
-                            Container(
-                              child: Column(
-                                children: <Widget>[
-                                  title.titleTest('assets/latency.svg', 'LATÊNCIA', Color.fromARGB(255, 255, 165, 0)),
-                                  result.resultTest(this._controller.result.latencyAvg, Color.fromARGB(255, 255, 165, 0), false, true),
-                                ],
-                              ),
-                            ),
-                          ]
+                            title.titleTest('assets/upload.svg', 'UPLOAD', Color.fromARGB(255, 95, 180, 4)),
+                            result.resultTest(this._controller.result.upAvg, this._controller.setColor(this._controller.result.upAvg, Color.fromARGB(255, 95, 180, 4)), true, true),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
 
+                    // Container responsável por mostrar o  resultado do teste de download
+                    Visibility(
+                      visible: (this._controller.result.latencyAvg != null),
+                      child: Container(
+                        child: Column(
+                          children: <Widget>[
+                            title.titleTest('assets/download.svg', 'DOWNLOAD', Color.fromARGB(255, 250, 88, 88)),
+                            result.resultTest(this._controller.result.downAvg, this._controller.setColor(this._controller.result.downAvg, Color.fromARGB(255, 250, 88, 88)), true, true),
+                          ],
+                        ),
+                      ),
+                    ),
+                    
+                   
+                      // Container responsável por mostrar o  resultado do teste de latência
+                      Container(
+                        child: Column(
+                          children: <Widget>[
+                            title.titleTest('assets/latency.svg', 'LATÊNCIA', Color.fromARGB(255, 255, 165, 0) ),
+                            result.resultTest(this._controller.result.latencyAvg, this._controller.setColor(this._controller.result.latencyAvg, Color.fromARGB(255, 255, 165, 0)), false, true),
+                          ],
+                        ),
+                      ),
+                    
+                    
                     // É o botão onde só é visível e funcional qunado termina os testes
                     Visibility(
                       visible: ((this._controller.result.upAvg != null) && (this._controller.result.downAvg != null) && (this._controller.result.latencyAvg != null)),
@@ -237,6 +208,7 @@ class _TestPageState extends State<TestPage>{
                               ),
                               padding: EdgeInsets.only(top: 10, bottom: 10),
                               onPressed: () async{
+                                timer.cancel();
                                 bool flag = await this._controller.saveResult(widget.serverTest.id);
                                 if(flag){
                                   Navigator.of(context).pop();

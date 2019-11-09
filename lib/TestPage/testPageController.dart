@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:Veloz/functions/avg.dart' as average;
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:Veloz/objects/database.dart';
 import 'package:Veloz/objects/metricsClass.dart';
@@ -16,10 +17,16 @@ class TestPageController{
     upAvg: null,
     );
   bool sucess = false;
-  
 
   Sink get input => _streamController.sink;
   Stream get output => _streamController.stream;
+
+  bool opacity = true;
+
+  void invertOpacity(){
+    this.opacity = !this.opacity;
+    _streamController.add(this.opacity);
+  } 
 
   void latencyTest(String ip) async{
     int latency = await this._metric.latencyTest(ip);
@@ -77,6 +84,38 @@ class TestPageController{
     }else{
       return false;
     }
+  }
+
+  // Função responsável pelo design tanto do servidor a ser testado, quanto para o ip do Smartphone 
+  Widget connectInfo(String name, String dns, Color color){
+    return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            name,
+            style: TextStyle(
+              fontFamily: 'Open Sans',
+              fontSize: 18,
+              color: color,
+            ),
+          ),
+          Text(
+            dns,
+            style: TextStyle(
+              fontFamily: 'Open Sans',
+              color: color,
+            ),
+          ),
+        ],
+      );
+  }
+
+  // Função que mudará a cor enquato o resultado do teste atual for null
+  Color setColor(int value, Color color){
+      if(value == null){
+        return (this.opacity)? color : Colors.transparent;
+      }
+      return color;
   }
 
   void dispose(){
