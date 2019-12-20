@@ -53,7 +53,7 @@ class _HomePageState extends State<HomePage>{
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 // Título do App
-                Text('Veloz',
+                Text('Velaz',
                   style: TextStyle(
                       fontFamily: 'Poiret One',
                       fontSize: 90,
