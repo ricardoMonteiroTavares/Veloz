@@ -32,7 +32,6 @@ class TestPage extends StatefulWidget{
 
 class _TestPageState extends State<TestPage>{
   final TestPageController _controller = TestPageController();
-  Timer timer = Timer.periodic(const Duration(seconds: 2),(Timer t) => this._controller.invertOpacity());
 
   @override
   void initState(){
@@ -77,6 +76,7 @@ class _TestPageState extends State<TestPage>{
     return StreamBuilder(
       stream: this._controller.output,
       builder: (context, snapshot) {
+        Timer timer = Timer.periodic(const Duration(seconds: 2),(Timer t) => this._controller.invertOpacity());
         return Scaffold(
           appBar: AppBar(
             title: Text('Testando'),
